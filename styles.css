@@ -320,6 +320,10 @@ nav {
   opacity: 0.2;
 }
 
+.product-card:active::before {
+  opacity: 0.3;
+}
+
 .product-slider {
   position: relative;
   height: 300px;
@@ -334,6 +338,10 @@ nav {
 }
 
 .product-slider:hover .product-image {
+  transform: scale(1.1);
+}
+
+.product-slider:active .product-image {
   transform: scale(1.1);
 }
 
@@ -653,6 +661,30 @@ footer {
 
   .section-title {
     font-size: 2rem;
+  }
+}
+
+@media (hover: none) {
+  .product-card {
+    cursor: pointer;
+  }
+
+  .product-card::after {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+  }
+
+  .product-card.touch-active::after {
+    opacity: 1;
   }
 }
 
