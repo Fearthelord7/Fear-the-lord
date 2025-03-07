@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Mobile menu toggle
-  const menuToggle = document.querySelector(".menu-toggle")
+  // Mobile menu toggle using FTL logo
+  const mobileToggle = document.querySelector(".mobile-toggle")
   const navLinks = document.querySelector(".nav-links")
 
-  if (menuToggle) {
-    menuToggle.addEventListener("click", function () {
-      this.classList.toggle("active")
+  if (mobileToggle) {
+    mobileToggle.addEventListener("click", (e) => {
+      e.preventDefault() // Prevent default link behavior
       navLinks.classList.toggle("active")
       document.body.classList.toggle("no-scroll")
     })
@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const navItems = document.querySelectorAll(".nav-links a")
   navItems.forEach((item) => {
     item.addEventListener("click", () => {
-      menuToggle.classList.remove("active")
       navLinks.classList.remove("active")
       document.body.classList.remove("no-scroll")
     })
@@ -83,28 +82,46 @@ document.addEventListener("DOMContentLoaded", () => {
       const targetId = this.getAttribute("href")
       if (targetId === "#") return // Skip if it's just "#"
 
-      const targetElement = document.querySelector(targetId)
-      if (targetElement) {
+      if (targetId === "#top") {
+        // Scroll to the top of the page for Home link
         window.scrollTo({
-          top: targetElement.offsetTop - 80, // Offset for header
+          top: 0,
           behavior: "smooth",
         })
+      } else {
+        // Scroll to the specific section for other links
+        const targetElement = document.querySelector(targetId)
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80, // Offset for header
+            behavior: "smooth",
+          })
+        }
       }
     })
   })
 
-  // Initialize Lightning effect
+  // Initialize Lightning effect - now applied to the entire body
   initLightning()
 })
 
-// Lightning effect implementation
+// Lightning effect implementation - modified to be visible throughout the site
 function initLightning() {
-  const container = document.getElementById("lightning-container")
-  if (!container) return
+  // Create a fixed lightning container for the entire page
+  const lightningContainer = document.createElement("div")
+  lightningContainer.id = "lightning-container"
+  lightningContainer.style.position = "fixed"
+  lightningContainer.style.top = "0"
+  lightningContainer.style.left = "0"
+  lightningContainer.style.width = "100%"
+  lightningContainer.style.height = "100%"
+  lightningContainer.style.zIndex = "-2"
+  lightningContainer.style.pointerEvents = "none"
+  document.body.prepend(lightningContainer)
 
   const canvas = document.createElement("canvas")
   canvas.className = "lightning-container"
-  container.appendChild(canvas)
+  lightningContainer.appendChild(canvas)
 
   const resizeCanvas = () => {
     canvas.width = window.innerWidth
@@ -269,6 +286,8 @@ function initLightning() {
 
   const startTime = performance.now()
 
+  gl.useProgram(program) // Ensure program is always used during render
+
   const render = () => {
     gl.useProgram(program) // Ensure program is always used during render
     resizeCanvas()
@@ -285,6 +304,7 @@ function initLightning() {
     requestAnimationFrame(render)
   }
 
+  gl.useProgram(program) // Ensure program is always used during render
   requestAnimationFrame(render)
 }
 
