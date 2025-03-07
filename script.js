@@ -1,147 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // Mobile menu toggle using FTL logo
-  const mobileToggle = document.querySelector(".mobile-toggle")
-  const navLinks = document.querySelector(".nav-links")
-
-  if (mobileToggle) {
-    mobileToggle.addEventListener("click", (e) => {
-      e.preventDefault() // Prevent default link behavior
-      navLinks.classList.toggle("active")
-      document.body.classList.toggle("no-scroll")
-    })
-  }
-
-  // Close mobile menu when clicking on a link
-  const navItems = document.querySelectorAll(".nav-links a")
-  navItems.forEach((item) => {
-    item.addEventListener("click", () => {
-      navLinks.classList.remove("active")
-      document.body.classList.remove("no-scroll")
-    })
-  })
-
-  // Header scroll effect
-  const header = document.querySelector("header")
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 50) {
-      header.classList.add("scrolled")
-    } else {
-      header.classList.remove("scrolled")
-    }
-  })
-
-  // Logo entrance animation
-  const logo = document.querySelector(".main-logo")
-  const brandName = document.querySelector(".brand-name")
-  const tagline = document.querySelector(".tagline")
-
-  if (logo && brandName && tagline) {
-    // Add initial opacity 0 to elements
-    logo.style.opacity = "0"
-    brandName.style.opacity = "0"
-    tagline.style.opacity = "0"
-
-    // Animate elements in sequence
-    setTimeout(() => {
-      logo.style.transition = "opacity 1.5s ease, transform 1.5s ease"
-      logo.style.opacity = "1"
-      logo.style.transform = "translateY(0)"
-    }, 300)
-
-    setTimeout(() => {
-      brandName.style.transition = "opacity 1.5s ease, transform 1.5s ease"
-      brandName.style.opacity = "1"
-      brandName.style.transform = "translateY(0)"
-    }, 1000)
-
-    setTimeout(() => {
-      tagline.style.transition = "opacity 1.5s ease"
-      tagline.style.opacity = "1"
-    }, 1800)
-  }
-
-  // Parallax effect on logo
-  const heroSection = document.querySelector(".hero")
-  if (heroSection) {
-    window.addEventListener("mousemove", (e) => {
-      const x = e.clientX / window.innerWidth
-      const y = e.clientY / window.innerHeight
-
-      const logoContainer = document.querySelector(".logo-animation")
-      if (logoContainer) {
-        logoContainer.style.transform = `translate(${x * 20 - 10}px, ${y * 20 - 10}px)`
-      }
-    })
-  }
-
-  // Smooth scrolling for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-    anchor.addEventListener("click", function (e) {
-      e.preventDefault()
-
-      const targetId = this.getAttribute("href")
-      if (targetId === "#") return // Skip if it's just "#"
-
-      if (targetId === "#top") {
-        // Scroll to the top of the page for Home link
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        })
-      } else {
-        // Scroll to the specific section for other links
-        const targetElement = document.querySelector(targetId)
-        if (targetElement) {
-          window.scrollTo({
-            top: targetElement.offsetTop - 80, // Offset for header
-            behavior: "smooth",
-          })
-        }
-      }
-    })
-  })
-
-  // Initialize Lightning effect - now applied to the entire body
-  initLightning()
-
-  // Touch feedback for product cards on mobile
-  const productCards = document.querySelectorAll(".product-card")
-  productCards.forEach((card) => {
-    card.addEventListener("touchstart", function (e) {
-      // Get touch position
-      const touch = e.touches[0]
-      const touchX = touch.clientX
-      const touchY = touch.clientY
-
-      // Position the touch indicator
-      this.classList.add("touch-active")
-      const indicator = this.querySelector("::after")
-      if (indicator) {
-        indicator.style.left = `${touchX}px`
-        indicator.style.top = `${touchY}px`
-      }
-    })
-
-    card.addEventListener("touchend", function () {
-      this.classList.remove("touch-active")
-    })
-
-    card.addEventListener("touchmove", function (e) {
-      // Update position during touch move
-      const touch = e.touches[0]
-      const touchX = touch.clientX
-      const touchY = touch.clientY
-
-      const indicator = this.querySelector("::after")
-      if (indicator) {
-        indicator.style.left = `${touchX}px`
-        indicator.style.top = `${touchY}px`
-      }
-    })
-  })
-})
-
-// Lightning effect implementation - modified to be visible throughout the site
+// Fix the lightning effect in the fragment shader
 function initLightning() {
   // Create a fixed lightning container for the entire page
   const lightningContainer = document.createElement("div")
@@ -322,7 +179,8 @@ function initLightning() {
 
   const startTime = performance.now()
 
-  gl.useProgram(program) // Ensure program is always used during render
+  // Ensure program is always used during render
+  // gl.useProgram(program) // Ensure program is always used during render
 
   const render = () => {
     gl.useProgram(program) // Ensure program is always used during render
@@ -340,7 +198,570 @@ function initLightning() {
     requestAnimationFrame(render)
   }
 
-  gl.useProgram(program) // Ensure program is always used during render
+  // Ensure program is always used during render
+  // gl.useProgram(program) // Ensure program is always used during render
   requestAnimationFrame(render)
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Cart functionality
+  const cart = {
+    items: [],
+    total: 0,
+
+    addItem(product) {
+      // Get selected options
+      const productCard = product.card
+      const sizeSelect = productCard ? productCard.querySelector(".product-size") : null
+      const colorSelect = productCard ? productCard.querySelector(".product-color") : null
+
+      const size = sizeSelect ? sizeSelect.value : "M"
+      const color = colorSelect ? colorSelect.value : "Black"
+
+      // Create unique ID based on product ID, size, and color
+      const itemId = `${product.id}-${size}-${color}`
+
+      // Check if this exact combination exists already
+      const existingItem = this.items.find(
+        (item) => item.id === product.id && item.size === size && item.color === color,
+      )
+
+      if (existingItem) {
+        existingItem.quantity += 1
+      } else {
+        this.items.push({
+          ...product,
+          itemId,
+          size,
+          color,
+          quantity: 1,
+        })
+      }
+
+      this.updateTotal()
+      this.saveCart()
+      this.updateCartUI()
+      this.updateCartCount()
+    },
+
+    removeItem(itemId) {
+      const index = this.items.findIndex((item) => item.itemId === itemId)
+      if (index !== -1) {
+        this.items.splice(index, 1)
+        this.updateTotal()
+        this.saveCart()
+        this.updateCartUI()
+        this.updateCartCount()
+      }
+    },
+
+    updateQuantity(itemId, quantity) {
+      const item = this.items.find((item) => item.itemId === itemId)
+      if (item) {
+        item.quantity = quantity
+        if (item.quantity <= 0) {
+          this.removeItem(itemId)
+        } else {
+          this.updateTotal()
+          this.saveCart()
+          this.updateCartUI()
+          this.updateCartCount()
+        }
+      }
+    },
+
+    updateTotal() {
+      this.total = this.items.reduce((sum, item) => {
+        return sum + Number.parseFloat(item.price.replace("$", "")) * item.quantity
+      }, 0)
+    },
+
+    clearCart() {
+      this.items = []
+      this.total = 0
+      this.saveCart()
+      this.updateCartUI()
+      this.updateCartCount()
+    },
+
+    saveCart() {
+      localStorage.setItem(
+        "ftlCart",
+        JSON.stringify({
+          items: this.items,
+          total: this.total,
+        }),
+      )
+    },
+
+    loadCart() {
+      const savedCart = localStorage.getItem("ftlCart")
+      if (savedCart) {
+        const parsedCart = JSON.parse(savedCart)
+        this.items = parsedCart.items || []
+        this.total = parsedCart.total || 0
+        this.updateCartUI()
+        this.updateCartCount()
+      }
+    },
+
+    updateCartCount() {
+      const cartCount = document.querySelector(".cart-count")
+      if (cartCount) {
+        const itemCount = this.items.reduce((count, item) => count + item.quantity, 0)
+        cartCount.textContent = itemCount
+        cartCount.style.display = itemCount > 0 ? "flex" : "none"
+      }
+    },
+
+    updateCartUI() {
+      const cartItemsContainer = document.querySelector(".cart-items")
+      if (!cartItemsContainer) return
+
+      cartItemsContainer.innerHTML = ""
+
+      if (this.items.length === 0) {
+        cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>'
+        document.querySelector(".cart-footer").style.display = "none"
+        return
+      }
+
+      document.querySelector(".cart-footer").style.display = "block"
+
+      this.items.forEach((item) => {
+        const cartItem = document.createElement("div")
+        cartItem.className = "cart-item"
+        cartItem.innerHTML = `
+          <div class="cart-item-image">
+            <img src="${item.image || "/placeholder.svg?height=60&width=60"}" alt="${item.name}">
+          </div>
+          <div class="cart-item-details">
+            <h4 class="cart-item-name">${item.name}</h4>
+            <div class="cart-item-meta">
+              <span>Size: ${item.size}</span>
+              <span>Color: ${item.color}</span>
+            </div>
+            <div class="cart-item-price">${item.price}</div>
+            <div class="cart-item-controls">
+              <button class="quantity-btn minus" data-id="${item.itemId}">-</button>
+              <span class="quantity">${item.quantity}</span>
+              <button class="quantity-btn plus" data-id="${item.itemId}">+</button>
+              <button class="remove-btn" data-id="${item.itemId}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+              </button>
+            </div>
+          </div>
+        `
+
+        cartItemsContainer.appendChild(cartItem)
+      })
+
+      // Update total
+      document.querySelector(".cart-total-amount").textContent = `$${this.total.toFixed(2)}`
+
+      // Add event listeners to the newly created buttons
+      document.querySelectorAll(".quantity-btn.minus").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-id")
+          const item = this.items.find((item) => item.itemId === id)
+          if (item) {
+            this.updateQuantity(id, item.quantity - 1)
+          }
+        })
+      })
+
+      document.querySelectorAll(".quantity-btn.plus").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-id")
+          const item = this.items.find((item) => item.itemId === id)
+          if (item) {
+            this.updateQuantity(id, item.quantity + 1)
+          }
+        })
+      })
+
+      document.querySelectorAll(".remove-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-id")
+          this.removeItem(id)
+        })
+      })
+    },
+  }
+
+  // Initialize cart
+  cart.loadCart()
+
+  // Add to cart functionality
+  const productButtons = document.querySelectorAll(".product-button")
+  productButtons.forEach((button, index) => {
+    button.addEventListener("click", () => {
+      // Get the product card
+      const productCard = button.closest(".product-card")
+      const productName = productCard.querySelector(".product-name").textContent
+      const productPrice = productCard.querySelector(".product-price").textContent
+
+      const product = {
+        id: index + 1,
+        name: productName,
+        price: productPrice,
+        image: "/placeholder.svg?height=60&width=60",
+        card: productCard,
+      }
+
+      cart.addItem(product)
+
+      // Show cart notification
+      const notification = document.createElement("div")
+      notification.className = "cart-notification"
+      notification.textContent = `${product.name} added to cart!`
+      document.body.appendChild(notification)
+
+      setTimeout(() => {
+        notification.classList.add("show")
+      }, 10)
+
+      setTimeout(() => {
+        notification.classList.remove("show")
+        setTimeout(() => {
+          document.body.removeChild(notification)
+        }, 300)
+      }, 2000)
+    })
+  })
+
+  // Cart toggle
+  const cartToggle = document.querySelector(".cart-toggle")
+  if (cartToggle) {
+    cartToggle.addEventListener("click", (e) => {
+      e.preventDefault()
+      document.querySelector(".cart-container").classList.add("active")
+    })
+  }
+
+  // Close cart
+  const cartClose = document.querySelector(".cart-close")
+  if (cartClose) {
+    cartClose.addEventListener("click", () => {
+      document.querySelector(".cart-container").classList.remove("active")
+    })
+  }
+
+  // Overlay close cart
+  const cartOverlay = document.querySelector(".cart-overlay")
+  if (cartOverlay) {
+    cartOverlay.addEventListener("click", () => {
+      document.querySelector(".cart-container").classList.remove("active")
+    })
+  }
+
+  // Checkout button
+  const checkoutBtn = document.querySelector(".checkout-btn")
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", () => {
+      if (cart.items.length === 0) return
+
+      document.querySelector(".cart-container").classList.remove("active")
+      document.querySelector(".checkout-container").classList.add("active")
+    })
+  }
+
+  // Close checkout
+  const checkoutClose = document.querySelector(".checkout-close")
+  if (checkoutClose) {
+    checkoutClose.addEventListener("click", () => {
+      document.querySelector(".checkout-container").classList.remove("active")
+    })
+  }
+
+  // Overlay close checkout
+  const checkoutOverlay = document.querySelector(".checkout-overlay")
+  if (checkoutOverlay) {
+    checkoutOverlay.addEventListener("click", () => {
+      document.querySelector(".checkout-container").classList.remove("active")
+    })
+  }
+
+  // Payment form submission
+  const paymentForm = document.getElementById("payment-form")
+  if (paymentForm) {
+    paymentForm.addEventListener("submit", (e) => {
+      e.preventDefault()
+
+      // Show loading state
+      document.querySelector(".payment-processing").style.display = "flex"
+      document.querySelector(".payment-btn").disabled = true
+
+      // In a real implementation, you would create a payment intent on your server
+      // and confirm the payment here. For this demo, we'll simulate a successful payment.
+      setTimeout(() => {
+        document.querySelector(".payment-processing").style.display = "none"
+        document.querySelector(".payment-success").style.display = "flex"
+
+        // Clear cart after successful payment
+        setTimeout(() => {
+          cart.clearCart()
+          document.querySelector(".checkout-container").classList.remove("active")
+          document.querySelector(".payment-success").style.display = "none"
+          document.querySelector(".payment-btn").disabled = false
+        }, 3000)
+      }, 2000)
+    })
+  }
+
+  // Mobile menu toggle using FTL logo
+  const mobileToggle = document.querySelector(".mobile-toggle")
+  const navLinks = document.querySelector(".nav-links")
+
+  if (mobileToggle) {
+    mobileToggle.addEventListener("click", (e) => {
+      e.preventDefault() // Prevent default link behavior
+      navLinks.classList.toggle("active")
+      document.body.classList.toggle("no-scroll")
+    })
+  }
+
+  // Close mobile menu when clicking on a link
+  const navItems = document.querySelectorAll(".nav-links a")
+  navItems.forEach((item) => {
+    item.addEventListener("click", () => {
+      navLinks.classList.remove("active")
+      document.body.classList.remove("no-scroll")
+    })
+  })
+
+  // Header scroll effect
+  const header = document.querySelector("header")
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 50) {
+      header.classList.add("scrolled")
+    } else {
+      header.classList.remove("scrolled")
+    }
+  })
+
+  // Logo entrance animation
+  const logo = document.querySelector(".main-logo")
+  const brandName = document.querySelector(".brand-name")
+  const tagline = document.querySelector(".tagline")
+
+  if (logo && brandName && tagline) {
+    // Add initial opacity 0 to elements
+    logo.style.opacity = "0"
+    brandName.style.opacity = "0"
+    tagline.style.opacity = "0"
+
+    // Animate elements in sequence
+    setTimeout(() => {
+      logo.style.transition = "opacity 1.5s ease, transform 1.5s ease"
+      logo.style.opacity = "1"
+      logo.style.transform = "translateY(0)"
+    }, 300)
+
+    setTimeout(() => {
+      brandName.style.transition = "opacity 1.5s ease, transform 1.5s ease"
+      brandName.style.opacity = "1"
+      brandName.style.transform = "translateY(0)"
+    }, 1000)
+
+    setTimeout(() => {
+      tagline.style.transition = "opacity 1.5s ease"
+      tagline.style.opacity = "1"
+    }, 1800)
+  }
+
+  // Parallax effect on logo
+  const heroSection = document.querySelector(".hero")
+  if (heroSection) {
+    window.addEventListener("mousemove", (e) => {
+      const x = e.clientX / window.innerWidth
+      const y = e.clientY / window.innerHeight
+
+      const logoContainer = document.querySelector(".logo-animation")
+      if (logoContainer) {
+        logoContainer.style.transform = `translate(${x * 20 - 10}px, ${y * 20 - 10}px)`
+      }
+    })
+  }
+
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault()
+
+      const targetId = this.getAttribute("href")
+      if (targetId === "#") return // Skip if it's just "#"
+
+      if (targetId === "#top") {
+        // Scroll to the top of the page for Home link
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        })
+      } else {
+        // Scroll to the specific section for other links
+        const targetElement = document.querySelector(targetId)
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80, // Offset for header
+            behavior: "smooth",
+          })
+        }
+      }
+    })
+  })
+
+  // Initialize Lightning effect - now applied to the entire body
+  initLightning()
+
+  // Search functionality
+  const searchToggle = document.querySelector(".search-toggle")
+  const searchContainer = document.querySelector(".search-container")
+  const searchClose = document.querySelector(".search-close")
+  const searchForm = document.querySelector(".search-form")
+  const searchInput = document.querySelector(".search-input")
+  const searchResults = document.querySelector(".search-results")
+
+  // Sample product data for search
+  const products = [
+    {
+      id: 1,
+      name: "FTL T-shirt",
+      price: "$49.99",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      id: 2,
+      name: "FTL Shorts",
+      price: "$69.99",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      id: 3,
+      name: "FTL Hoodie",
+      price: "$129.99",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      id: 4,
+      name: "FTL Socks",
+      price: "$89.99",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+  ]
+
+  // Toggle search container
+  if (searchToggle) {
+    searchToggle.addEventListener("click", (e) => {
+      e.preventDefault()
+      searchContainer.classList.add("active")
+      document.body.classList.add("no-scroll")
+      setTimeout(() => {
+        searchInput.focus()
+      }, 300)
+    })
+  }
+
+  // Close search container
+  if (searchClose) {
+    searchClose.addEventListener("click", () => {
+      searchContainer.classList.remove("active")
+      document.body.classList.remove("no-scroll")
+      searchResults.classList.remove("active")
+      searchInput.value = ""
+    })
+  }
+
+  // Close search on escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && searchContainer.classList.contains("active")) {
+      searchContainer.classList.remove("active")
+      document.body.classList.remove("no-scroll")
+      searchResults.classList.remove("active")
+      searchInput.value = ""
+    }
+  })
+
+  // Search functionality
+  if (searchForm) {
+    searchForm.addEventListener("submit", (e) => {
+      e.preventDefault()
+      performSearch()
+    })
+  }
+
+  // Live search as user types
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      if (searchInput.value.length > 1) {
+        performSearch()
+      } else {
+        searchResults.classList.remove("active")
+      }
+    })
+  }
+
+  function performSearch() {
+    const query = searchInput.value.toLowerCase().trim()
+
+    if (query.length < 2) return
+
+    const filteredProducts = products.filter((product) => product.name.toLowerCase().includes(query))
+
+    // Display results
+    searchResults.innerHTML = ""
+
+    if (filteredProducts.length > 0) {
+      filteredProducts.forEach((product) => {
+        const resultItem = document.createElement("a")
+        resultItem.href = "#" // In a real app, link to product page
+        resultItem.className = "search-result-item"
+        resultItem.innerHTML = `
+          <img src="${product.image}" alt="${product.name}" class="search-result-image">
+          <div class="search-result-info">
+            <div class="search-result-name">${product.name}</div>
+            <div class="search-result-price">${product.price}</div>
+          </div>
+        `
+
+        // Add click event to add product to cart
+        resultItem.addEventListener("click", (e) => {
+          e.preventDefault()
+          cart.addItem(product)
+          searchContainer.classList.remove("active")
+          document.body.classList.remove("no-scroll")
+
+          // Show cart notification
+          const notification = document.createElement("div")
+          notification.className = "cart-notification"
+          notification.textContent = `${product.name} added to cart!`
+          document.body.appendChild(notification)
+
+          setTimeout(() => {
+            notification.classList.add("show")
+          }, 10)
+
+          setTimeout(() => {
+            notification.classList.remove("show")
+            setTimeout(() => {
+              document.body.removeChild(notification)
+            }, 300)
+          }, 2000)
+
+          // Open cart drawer
+          document.querySelector(".cart-container").classList.add("active")
+        })
+
+        searchResults.appendChild(resultItem)
+      })
+    } else {
+      const noResults = document.createElement("div")
+      noResults.className = "no-results"
+      noResults.textContent = "No products found"
+      searchResults.appendChild(noResults)
+    }
+
+    searchResults.classList.add("active")
+  }
+})
 
