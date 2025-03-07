@@ -119,7 +119,7 @@
     <section class="hero">
       <div class="logo-container">
         <div class="logo-animation">
-          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FTL_logo_cross-removebg-preview_enhanced-C1dbAlyvf9xSdZ2TGwqefnJij9QpyX.png" alt="Fear the Lord Logo" class="main-logo">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FTL_logo_cross-removebg-preview_enhanced-GBjK00GNoOBDiUeGpNZU3UP6Gu7GCW.png" alt="Fear the Lord Logo" class="main-logo">
         </div>
         <h1 class="brand-name">Fear the Lord</h1>
         <p class="tagline">Saved by His Grace</p>
@@ -260,11 +260,12 @@
         <h2 class="section-title">Contact Us</h2>
         <div class="contact-grid">
           <div class="contact-form-container">
-            <form class="contact-form">
-              <input type="text" placeholder="Your Name" required>
-              <input type="email" placeholder="Your Email" required>
-              <textarea placeholder="Your Message" required></textarea>
+            <form id="my-form" class="contact-form" action="https://formspree.io/f/xzzepjzo" method="POST">
+              <input type="text" name="name" placeholder="Your Name" required>
+              <input type="email" name="email" placeholder="Your Email" required>
+              <textarea name="message" placeholder="Your Message" required></textarea>
               <button type="submit" class="submit-button">Send Message</button>
+              <p id="my-form-status" class="form-status-message"></p>
             </form>
           </div>
           <div class="contact-info">
@@ -299,8 +300,48 @@
         </div>
       </div>
     </section>
-  </main>
-
+    
+    <!-- Add this script before closing </body> tag -->
+    <script>
+      var form = document.getElementById("my-form");
+      
+      async function handleSubmit(event) {
+        event.preventDefault();
+        var status = document.getElementById("my-form-status");
+        var data = new FormData(event.target);
+        
+        fetch(event.target.action, {
+          method: form.method,
+          body: data,
+          headers: {
+            'Accept': 'application/json'
+          }
+        }).then(response => {
+          if (response.ok) {
+            status.innerHTML = "Thanks for your submission!";
+            status.style.color = "#4CAF50"; // Green success color
+            form.reset();
+            setTimeout(() => {
+              status.innerHTML = "";
+            }, 3000);
+          } else {
+            response.json().then(data => {
+              if (Object.hasOwn(data, 'errors')) {
+                status.innerHTML = data["errors"].map(error => error["message"]).join(", ");
+              } else {
+                status.innerHTML = "Oops! There was a problem submitting your form";
+              }
+              status.style.color = "#f44336"; // Red error color
+            });
+          }
+        }).catch(error => {
+          status.innerHTML = "Oops! There was a problem submitting your form";
+          status.style.color = "#f44336";
+        });
+      }
+      form.addEventListener("submit", handleSubmit);
+    </script>
+    
   <footer>
     <div class="footer-content">
       <p>&copy; 2025 Fear the Lord. All rights reserved.</p>
@@ -318,7 +359,12 @@
     </div>
   </footer>
 
+  
   <script src="script.js"></script>
   <script src="https://js.stripe.com/v3/"></script>
 </body>
 </html>
+
+
+
+
