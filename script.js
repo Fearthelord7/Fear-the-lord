@@ -103,6 +103,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize Lightning effect - now applied to the entire body
   initLightning()
+
+  // Touch feedback for product cards on mobile
+  const productCards = document.querySelectorAll(".product-card")
+  productCards.forEach((card) => {
+    card.addEventListener("touchstart", function (e) {
+      // Get touch position
+      const touch = e.touches[0]
+      const touchX = touch.clientX
+      const touchY = touch.clientY
+
+      // Position the touch indicator
+      this.classList.add("touch-active")
+      const indicator = this.querySelector("::after")
+      if (indicator) {
+        indicator.style.left = `${touchX}px`
+        indicator.style.top = `${touchY}px`
+      }
+    })
+
+    card.addEventListener("touchend", function () {
+      this.classList.remove("touch-active")
+    })
+
+    card.addEventListener("touchmove", function (e) {
+      // Update position during touch move
+      const touch = e.touches[0]
+      const touchX = touch.clientX
+      const touchY = touch.clientY
+
+      const indicator = this.querySelector("::after")
+      if (indicator) {
+        indicator.style.left = `${touchX}px`
+        indicator.style.top = `${touchY}px`
+      }
+    })
+  })
 })
 
 // Lightning effect implementation - modified to be visible throughout the site
