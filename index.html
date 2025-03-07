@@ -8,6 +8,44 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* Updated styles for better readability */
+    .brand-name {
+      font-family: var(--font-gothic);
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      letter-spacing: 4px;
+      /* Changed from a dark gradient to a lighter one */
+      background: linear-gradient(to bottom, #ffffff, #aaaaaa);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .tagline {
+      font-size: 1.2rem;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      /* Changed from var(--color-gray) which was #333333 to a much lighter color */
+      color: #cccccc;
+      position: relative;
+    }
+    
+    /* Coming soon placeholder style */
+    .coming-soon-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #222;
+      height: 100%;
+      width: 100%;
+      color: #aaa;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+  </style>
 </head>
 <body>
   <div class="noise"></div>
@@ -54,10 +92,10 @@
         <!-- Product 1 -->
         <div class="product-card">
           <div class="product-slider">
-            <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Gothic T-Shirt" class="product-image">
+            <div class="coming-soon-placeholder">Coming Soon</div>
           </div>
           <div class="product-info">
-            <h3 class="product-name">Crimson Cross T-Shirt</h3>
+            <h3 class="product-name">FTL T-shirt</h3>
             <p class="product-price">$49.99</p>
             <button class="product-button">Add to Cart</button>
           </div>
@@ -66,10 +104,10 @@
         <!-- Product 2 -->
         <div class="product-card">
           <div class="product-slider">
-            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Gothic Hoodie" class="product-image">
+            <div class="coming-soon-placeholder">Coming Soon</div>
           </div>
           <div class="product-info">
-            <h3 class="product-name">Salvation Hoodie</h3>
+            <h3 class="product-name">FTL Shorts</h3>
             <p class="product-price">$69.99</p>
             <button class="product-button">Add to Cart</button>
           </div>
@@ -78,10 +116,10 @@
         <!-- Product 3 -->
         <div class="product-card">
           <div class="product-slider">
-            <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Gothic Jacket" class="product-image">
+            <div class="coming-soon-placeholder">Coming Soon</div>
           </div>
           <div class="product-info">
-            <h3 class="product-name">Redeemer Leather Jacket</h3>
+            <h3 class="product-name">FTl Hoodie</h3>
             <p class="product-price">$129.99</p>
             <button class="product-button">Add to Cart</button>
           </div>
@@ -90,59 +128,11 @@
         <!-- Product 4 -->
         <div class="product-card">
           <div class="product-slider">
-            <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Gothic Boots" class="product-image">
+            <div class="coming-soon-placeholder">Coming Soon</div>
           </div>
           <div class="product-info">
-            <h3 class="product-name">Righteous Path Boots</h3>
+            <h3 class="product-name">FTl Socks</h3>
             <p class="product-price">$89.99</p>
-            <button class="product-button">Add to Cart</button>
-          </div>
-        </div>
-        
-        <!-- Product 5 -->
-        <div class="product-card">
-          <div class="product-slider">
-            <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Gothic Dress" class="product-image">
-          </div>
-          <div class="product-info">
-            <h3 class="product-name">Divine Grace Dress</h3>
-            <p class="product-price">$79.99</p>
-            <button class="product-button">Add to Cart</button>
-          </div>
-        </div>
-        
-        <!-- Product 6 -->
-        <div class="product-card">
-          <div class="product-slider">
-            <img src="https://images.unsplash.com/photo-1584030373081-f37b7bb4fa8e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Gothic Accessory" class="product-image">
-          </div>
-          <div class="product-info">
-            <h3 class="product-name">Faith Cross Necklace</h3>
-            <p class="product-price">$39.99</p>
-            <button class="product-button">Add to Cart</button>
-          </div>
-        </div>
-        
-        <!-- Product 7 -->
-        <div class="product-card">
-          <div class="product-slider">
-            <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Gothic Pants" class="product-image">
-          </div>
-          <div class="product-info">
-            <h3 class="product-name">Sanctified Cargo Pants</h3>
-            <p class="product-price">$59.99</p>
-            <button class="product-button">Add to Cart</button>
-          </div>
-        </div>
-        
-        <!-- Product 8 -->
-        <div class="product-card">
-          <div class="product-slider">
-            <img src="https://images.unsplash.com/photo-1618354691792-d1d42acfd860?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Gothic Hat" class="product-image">
-          </div>
-          <div class="product-info">
-            <h3 class="product-name">Blessed Beanie</h3>
-            <p class="product-price">$29.99</p>
             <button class="product-button">Add to Cart</button>
           </div>
         </div>
@@ -213,7 +203,6 @@
     </div>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
-
