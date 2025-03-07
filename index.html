@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
+  <!-- Add Stripe.js -->
+  <script src="https://js.stripe.com/v3/"></script>
   <style>
     /* Updated styles for better readability */
     .brand-name {
@@ -99,53 +101,6 @@
     </div>
   </div>
 
-  <!-- Checkout Container -->
-  <div class="checkout-container">
-    <div class="checkout-overlay"></div>
-    <div class="checkout-drawer">
-      <div class="checkout-header">
-        <h3>Checkout</h3>
-        <button class="checkout-close">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
-        </button>
-      </div>
-      <div class="checkout-content">
-        <form id="payment-form">
-          <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="text" id="name" required>
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" required>
-          </div>
-          <div class="form-group">
-            <label for="address">Shipping Address</label>
-            <textarea id="address" required></textarea>
-          </div>
-          <div class="form-group">
-            <label for="card-element">Payment Details</label>
-            <div id="card-element">
-              <!-- A Stripe Element will be inserted here. -->
-            </div>
-            <div id="card-errors" role="alert"></div>
-          </div>
-          <button type="submit" class="payment-btn">Complete Order</button>
-          <div class="payment-processing">
-            <svg class="spinner" viewBox="0 0 50 50">
-              <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-            </svg>
-            <span>Processing payment...</span>
-          </div>
-          <div class="payment-success">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            <span>Payment successful! Thank you for your order.</span>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
   <!-- Search Container -->
   <div class="search-container">
     <button class="search-close">
@@ -164,7 +119,7 @@
     <section class="hero">
       <div class="logo-container">
         <div class="logo-animation">
-          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FTL_logo_cross-removebg-preview_enhanced-GBjK00GNoOBDiUeGpNZU3UP6Gu7GCW.png" alt="Fear the Lord Logo" class="main-logo">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FTL_logo_cross-removebg-preview_enhanced-C1dbAlyvf9xSdZ2TGwqefnJij9QpyX.png" alt="Fear the Lord Logo" class="main-logo">
         </div>
         <h1 class="brand-name">Fear the Lord</h1>
         <p class="tagline">Saved by His Grace</p>
@@ -328,7 +283,7 @@
               </div>
               <div class="contact-info-content">
                 <h3>Email</h3>
-                <p><a href="/cdn-cgi/l/email-protection#650c0b030a2503000417110d00090a17014b060a08"><span class="__cf_email__" data-cfemail="1f767179705f797a7e6d6b777a73706d7b317c7072">[email&#160;protected]</span></a></p>
+                <p><a href="mailto:info@fearthelord.com">info@fearthelord.com</a></p>
               </div>
             </div>
             <div class="contact-info-item">
@@ -363,8 +318,7 @@
     </div>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   <script src="script.js"></script>
+  <script src="https://js.stripe.com/v3/"></script>
 </body>
 </html>
-
