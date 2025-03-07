@@ -156,34 +156,16 @@ nav {
   justify-content: center;
 }
 
-/* Make menu toggle floating - improved */
-.menu-toggle {
+/* Mobile toggle using FTL from navbar */
+.mobile-toggle {
   display: none;
-  flex-direction: column;
-  gap: 6px;
   cursor: pointer;
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 200;
-  background-color: rgba(10, 10, 10, 0.8);
-  padding: 12px;
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(193, 0, 0, 0.7);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
-.menu-toggle:hover {
+.mobile-toggle:hover {
+  color: var(--color-accent-hover);
   transform: scale(1.1);
-  box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
-}
-
-.menu-toggle span {
-  display: block;
-  width: 30px;
-  height: 2px;
-  background-color: var(--color-text);
-  transition: all 0.3s ease;
 }
 
 .theme-toggle {
@@ -401,11 +383,11 @@ nav {
   transform: scale(1.05);
 }
 
-/* Contact Section - Updated background to match site */
+/* Contact Section - Updated to match collection background */
 .contact {
   padding: 8rem 2rem;
   position: relative;
-  background-color: var(--color-background);
+  background-color: rgba(15, 15, 15, 0.7);
 }
 
 .contact-overlay {
@@ -441,7 +423,7 @@ nav {
 .contact-form textarea {
   width: 100%;
   padding: 1rem;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
   border: 1px solid var(--color-light-gray);
   color: var(--color-text);
   font-family: var(--font-serif);
@@ -453,7 +435,7 @@ nav {
 .contact-form textarea:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .contact-form textarea {
@@ -601,20 +583,14 @@ footer {
     right: 0;
   }
 
-  .menu-toggle {
-    display: flex;
-  }
-
-  .menu-toggle.active span:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-  }
-
-  .menu-toggle.active span:nth-child(2) {
-    opacity: 0;
-  }
-
-  .menu-toggle.active span:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
+  .mobile-toggle {
+    display: block;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 200;
+    font-size: 2rem;
+    text-shadow: 0 0 10px rgba(193, 0, 0, 0.7);
   }
 
   .brand-name {
