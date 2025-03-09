@@ -10,44 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
   <!-- Add Stripe.js -->
   <script src="https://js.stripe.com/v3/"></script>
-  <style>
-    /* Updated styles for better readability */
-    .brand-name {
-      font-family: var(--font-gothic);
-      font-size: 5rem;
-      margin-bottom: 1rem;
-      letter-spacing: 4px;
-      /* Changed from a dark gradient to a lighter one */
-      background: linear-gradient(to bottom, #ffffff, #aaaaaa);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-    }
-
-    .tagline {
-      font-size: 1.2rem;
-      letter-spacing: 8px;
-      text-transform: uppercase;
-      /* Changed from var(--color-gray) which was #333333 to a much lighter color */
-      color: #cccccc;
-      position: relative;
-    }
-    
-    /* Coming soon placeholder style */
-    .coming-soon-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #222;
-      height: 100%;
-      width: 100%;
-      color: #aaa;
-      font-size: 1.5rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-  </style>
 </head>
 <body>
   <div class="noise"></div>
@@ -132,10 +94,29 @@
         <!-- Product 1 -->
         <div class="product-card">
           <div class="product-slider">
-            <div class="coming-soon-placeholder">Coming Soon</div>
+            <div class="slider-container">
+              <div class="slider-track">
+                <div class="slider-slide">
+                  <img src="/Users/marcoraromoreno/Desktop/Fear the lord/Mock Ups/FTL og logo shirt.png" alt="FTL T-shirt Front View" class="product-image">
+                </div>
+                <div class="slider-slide">
+                  <img src="/Users/marcoraromoreno/Desktop/Fear the lord/Mock Ups/FTL red logo shirt back.png" alt="FTL T-shirt Back View" class="product-image">
+                </div>
+                
+              </div>
+              <div class="slider-nav">
+                <button class="slider-prev">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+                </button>
+                <div class="slider-dots"></div>
+                <button class="slider-next">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+                </button>
+              </div>
+            </div>
           </div>
           <div class="product-info">
-            <h3 class="product-name">FTL T-shirt</h3>
+            <h3 class="product-name">FTL OG T-shirt</h3>
             <p class="product-price">$49.99</p>
             <div class="product-options">
               <div class="option-group">
@@ -163,10 +144,29 @@
         <!-- Product 2 -->
         <div class="product-card">
           <div class="product-slider">
-            <div class="coming-soon-placeholder">Coming Soon</div>
+            <div class="slider-container">
+              <div class="slider-track">
+                <div class="slider-slide">
+                  <img src="/Users/marcoraromoreno/Desktop/Fear the lord/Mock Ups/FTL hoodie front.png" alt="FTL Hoodie Front View" class="product-image">
+                </div>
+                <div class="slider-slide">
+                  <img src="/Users/marcoraromoreno/Desktop/Fear the lord/Mock Ups/FTL hoodie back.png" alt="FTL Hoodie Back View" class="product-image">
+                </div>
+                
+              </div>
+              <div class="slider-nav">
+                <button class="slider-prev">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+                </button>
+                <div class="slider-dots"></div>
+                <button class="slider-next">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+                </button>
+              </div>
+            </div>
           </div>
           <div class="product-info">
-            <h3 class="product-name">FTL Shorts</h3>
+            <h3 class="product-name">FTL OG Hoodie</h3>
             <p class="product-price">$69.99</p>
             <div class="product-options">
               <div class="option-group">
@@ -182,8 +182,8 @@
                 <label>Color:</label>
                 <select class="product-color">
                   <option selected>Black</option>
-                  <option>Grey</option>
-                  <option>Navy</option>
+                  <option>White</option>
+                  <option>Red</option>
                 </select>
               </div>
             </div>
@@ -194,10 +194,29 @@
         <!-- Product 3 -->
         <div class="product-card">
           <div class="product-slider">
-            <div class="coming-soon-placeholder">Coming Soon</div>
+            <div class="slider-container">
+              <div class="slider-track">
+                <div class="slider-slide">
+                  <img src="/Users/marcoraromoreno/Desktop/Fear the lord/Mock Ups/FTL shorts front.png" alt="FTL Shorts Front View" class="product-image">
+                </div>
+                <div class="slider-slide">
+                  <img src="Mock Ups/FTL shorts.png" alt="FTL Shorts Back View" class="product-image">
+                </div>
+                
+              </div>
+              <div class="slider-nav">
+                <button class="slider-prev">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+                </button>
+                <div class="slider-dots"></div>
+                <button class="slider-next">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+                </button>
+              </div>
+            </div>
           </div>
           <div class="product-info">
-            <h3 class="product-name">FTL Hoodie</h3>
+            <h3 class="product-name">FTL Shorts</h3>
             <p class="product-price">$129.99</p>
             <div class="product-options">
               <div class="option-group">
@@ -213,8 +232,8 @@
                 <label>Color:</label>
                 <select class="product-color">
                   <option selected>Black</option>
-                  <option>Grey</option>
-                  <option>Dark Red</option>
+                  <option>White</option>
+                  <option>Red</option>
                 </select>
               </div>
             </div>
@@ -225,10 +244,29 @@
         <!-- Product 4 -->
         <div class="product-card">
           <div class="product-slider">
-            <div class="coming-soon-placeholder">Coming Soon</div>
+            <div class="slider-container">
+              <div class="slider-track">
+                <div class="slider-slide">
+                  <img src="/Users/marcoraromoreno/Desktop/Fear the lord/Mock Ups/FTL jesus saves shorts front.png" alt="FTL Jesus Saves Shorts Front View" class="product-image">
+                </div>
+                <div class="slider-slide">
+                  <img src="Mock Ups/FTL jesus saves shorts.png" alt="FTL Jesus Saves Shorts Back View" class="product-image">
+                </div>
+                
+              </div>
+              <div class="slider-nav">
+                <button class="slider-prev">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+                </button>
+                <div class="slider-dots"></div>
+                <button class="slider-next">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+                </button>
+              </div>
+            </div>
           </div>
           <div class="product-info">
-            <h3 class="product-name">FTL Socks</h3>
+            <h3 class="product-name">FTL Jesus Saves Shorts</h3>
             <p class="product-price">$89.99</p>
             <div class="product-options">
               <div class="option-group">
@@ -237,6 +275,157 @@
                   <option>S</option>
                   <option selected>M</option>
                   <option>L</option>
+                  <option>XL</option>
+                </select>
+              </div>
+              <div class="option-group">
+                <label>Color:</label>
+                <select class="product-color">
+                  <option selected>Black</option>
+                  <option>White</option>
+                  <option>Red</option>
+                </select>
+              </div>
+            </div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- NEW Product 5 -->
+        <div class="product-card">
+          <div class="product-slider">
+            <div class="slider-container">
+              <div class="slider-track">
+                <div class="slider-slide">
+                  <img src="/Users/marcoraromoreno/Desktop/Fear the lord/Mock Ups/FTL side jesus front.png" alt="FTL Faith Over Fear T-shirt Front View" class="product-image">
+                </div>
+                <div class="slider-slide">
+                  <img src="/Users/marcoraromoreno/Desktop/Fear the lord/Mock Ups/FTL side jesus back.png" alt="FTL Faith Over Fear T-shirt Back View" class="product-image">
+                </div>
+                
+              </div>
+              <div class="slider-nav">
+                <button class="slider-prev">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+                </button>
+                <div class="slider-dots"></div>
+                <button class="slider-next">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">FTL Faith Over Fear T-shirt</h3>
+            <p class="product-price">$34.99</p>
+            <div class="product-options">
+              <div class="option-group">
+                <label>Size:</label>
+                <select class="product-size">
+                  <option>S</option>
+                  <option selected>M</option>
+                  <option>L</option>
+                  <option>XL</option>
+                </select>
+              </div>
+              <div class="option-group">
+                <label>Color:</label>
+                <select class="product-color">
+                  <option selected>Black</option>
+                  <option>White</option>
+                  <option>Red</option>
+                </select>
+              </div>
+            </div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- NEW Product 6 -->
+        <div class="product-card">
+          <div class="product-slider">
+            <div class="slider-container">
+              <div class="slider-track">
+                <div class="slider-slide">
+                  <img src="Mock Ups/FTL side cross front[88].png" alt="FTL Side Cross T-Shirt Front View" class="product-image">
+                </div>
+                <div class="slider-slide">
+                  <img src="/Users/marcoraromoreno/Desktop/Fear the lord/Mock Ups/FTL side cross back[72].png" alt="FTL Side Cross T-Shirt Back View" class="product-image">
+                </div>
+              
+              </div>
+              <div class="slider-nav">
+                <button class="slider-prev">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+                </button>
+                <div class="slider-dots"></div>
+                <button class="slider-next">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">Side Cross FTL T-Shirt</h3>
+            <p class="product-price">$29.99</p>
+            <div class="product-options">
+              <div class="option-group">
+                <label>Size:</label>
+                <select class="product-size">
+                  <option>S</option>
+                  <option selected>M</option>
+                  <option>L</option>
+                  <option>XL</option>
+                </select>
+              </div>
+              <div class="option-group">
+                <label>Color:</label>
+                <select class="product-color">
+                  <option selected>Black</option>
+                  <option>White</option>
+                  <option>Red</option>
+                </select>
+              </div>
+            </div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- NEW Product 7 -->
+        <div class="product-card">
+          <div class="product-slider">
+            <div class="slider-container">
+              <div class="slider-track">
+                <div class="slider-slide">
+                  <img src="/Users/marcoraromoreno/Desktop/Fear the lord/Mock Ups/FTL shirt[47].png" alt="FTL Jesus Saves T-Shirt Front View" class="product-image">
+                </div>
+                <div class="slider-slide">
+                  <img src="/Users/marcoraromoreno/Desktop/Fear the lord/Mock Ups/FTL shirt back jesus saves.png" alt="FTL Jesus Saves T-Shirt Back View" class="product-image">
+                </div>
+                
+              </div>
+              <div class="slider-nav">
+                <button class="slider-prev">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+                </button>
+                <div class="slider-dots"></div>
+                <button class="slider-next">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">Jesus Saves FTL T-Shirt</h3>
+            <p class="product-price">$19.99</p>
+            <div class="product-options">
+              <div class="option-group">
+                <label>Size:</label>
+                <select class="product-size">
+                  <option>S</option>
+                  <option selected>M</option>
+                  <option>L</option>
+                  <option>XL</option>
                 </select>
               </div>
               <div class="option-group">
@@ -284,7 +473,7 @@
               </div>
               <div class="contact-info-content">
                 <h3>Email</h3>
-                <p><a href="mailto:info@fearthelord.com">info@fearthelord.com</a></p>
+                <p><a href="/cdn-cgi/l/email-protection#640d0a020b2402010516100c01080b16004a070b09"><span class="__cf_email__" data-cfemail="f79e999198b791929685839f929b988593d994989a">[email&#160;protected]</span></a></p>
               </div>
             </div>
             <div class="contact-info-item">
@@ -302,7 +491,7 @@
     </section>
     
     <!-- Add this script before closing </body> tag -->
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
       var form = document.getElementById("my-form");
       
       async function handleSubmit(event) {
@@ -359,12 +548,7 @@
     </div>
   </footer>
 
-  
   <script src="script.js"></script>
   <script src="https://js.stripe.com/v3/"></script>
 </body>
 </html>
-
-
-
-
