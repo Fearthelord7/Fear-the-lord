@@ -711,19 +711,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Activate transition before navigating
-      const pageTransition = document.querySelector(".page-transition");
-      if (pageTransition) {
-        pageTransition.classList.add("active");
-
-        // Navigate after transition
-        setTimeout(() => {
-          window.location.href = `product-detail.html?id=${productId}`;
-        }, 300); // Reduced from 500ms to 300ms for a quicker transition
-      } else {
-        // Navigate immediately if no transition element
-        window.location.href = `product-detail.html?id=${productId}`;
-      }
+      // Navigate directly without transition
+      window.location.href = `product-detail.html?id=${productId}`;
     });
   });
 })
