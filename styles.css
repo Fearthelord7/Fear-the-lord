@@ -315,18 +315,83 @@ nav {
   background-color: #222;
 }
 
-/* Coming Soon Placeholder */
-.coming-soon-placeholder {
+/* Product Slider */
+.slider-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.slider-track {
+  display: flex;
+  width: 300%;
+  height: 100%;
+  transition: transform 0.5s ease;
+}
+
+.slider-slide {
+  width: 33.333%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  width: 100%;
-  color: #aaa;
-  font-size: 1.5rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  background-color: #222;
+}
+
+.product-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.slider-nav {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.slider-prev,
+.slider-next {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.slider-prev:hover,
+.slider-next:hover {
+  background-color: var(--color-accent);
+}
+
+.slider-dots {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.slider-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.slider-dot.active {
+  background-color: var(--color-accent);
 }
 
 /* UPDATED Product Info - Always visible */
@@ -1165,16 +1230,7 @@ footer {
 
 /* Coming soon placeholder style */
 .coming-soon-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #222;
-  height: 100%;
-  width: 100%;
-  color: #aaa;
-  font-size: 1.5rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  display: none;
 }
 
 /* Media Queries */
