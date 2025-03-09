@@ -293,13 +293,13 @@ nav {
 
 /* Make sure the last row products don't have any unwanted background */
 .collection-grid .product-card:nth-last-child(-n+4) {
-  background: none !important;
-  margin-bottom: 0 !important;
+  background-color: #000000 !important;
+  margin-bottom: 2rem !important;
 }
 
 /* UPDATED Product Card */
 .product-card {
-  background-color: var(--color-gray);
+  background-color: #000000 !important;
   border-radius: 5px;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
@@ -351,7 +351,7 @@ nav {
   position: relative;
   height: 300px; /* Increased height to prevent cutting off */
   overflow: hidden;
-  background-color: #222;
+  background-color: #000000;
 }
 
 .slider-container {
@@ -1292,7 +1292,7 @@ footer {
   }
 
   .collection-grid .product-card:nth-last-child(-n + 3) {
-    background-color: transparent;
+    background-color: #000000 !important;
     margin-bottom: 0;
   }
 }
@@ -1311,7 +1311,7 @@ footer {
   }
 
   .collection-grid .product-card:nth-last-child(-n + 2) {
-    background-color: transparent;
+    background-color: #000000 !important;
     margin-bottom: 0;
   }
 
@@ -1385,7 +1385,7 @@ footer {
   }
 
   .collection-grid .product-card:last-child {
-    background-color: transparent;
+    background-color: #000000 !important;
     margin-bottom: 0;
   }
 }
