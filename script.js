@@ -44,7 +44,261 @@ const products = [
   },
 ]
 
+// Cart functionality
+const cart = {
+  items: [],
+  total: 0,
+
+  addItem(product) {
+    const productCard = product.card
+    const sizeSelect = productCard ? productCard.querySelector(".product-size") : null
+    const colorSelect = productCard ? productCard.querySelector(".product-color") : null
+
+    const size = sizeSelect ? sizeSelect.value : "M"
+    const color = colorSelect ? colorSelect.value : "Black"
+
+    const itemId = `${product.id}-${size}-${color}`
+
+    const existingItem = this.items.find((item) => item.id === product.id && item.size === size && item.color === color)
+
+    if (existingItem) {
+      existingItem.quantity += 1
+    } else {
+      this.items.push({
+        ...product,
+        itemId,
+        size,
+        color,
+        quantity: 1,
+      })
+    }
+
+    this.updateTotal()
+    this.saveCart()
+    this.updateCartUI()
+    this.updateCartCount()
+  },
+
+  removeItem(itemId) {
+    const index = this.items.findIndex((item) => item.itemId === itemId)
+    if (index !== -1) {
+      this.items.splice(index, 1)
+      this.updateTotal()
+      this.saveCart()
+      this.updateCartUI()
+      this.updateCartCount()
+    }
+  },
+
+  updateQuantity(itemId, quantity) {
+    const item = this.items.find((item) => item.itemId === itemId)
+    if (item) {
+      item.quantity = quantity
+      if (item.quantity <= 0) {
+        this.removeItem(itemId)
+      } else {
+        this.updateTotal()
+        this.saveCart()
+        this.updateCartUI()
+        this.updateCartCount()
+      }
+    }
+  },
+
+  updateTotal() {
+    this.total = this.items.reduce((sum, item) => {
+      return sum + Number.parseFloat(item.price.replace("$", "")) * item.quantity
+    }, 0)
+  },
+
+  clearCart() {
+    this.items = []
+    this.total = 0
+    this.saveCart()
+    this.updateCartUI()
+    this.updateCartCount()
+  },
+
+  saveCart() {
+    sessionStorage.setItem(
+      "ftlCart",
+      JSON.stringify({
+        items: this.items,
+        total: this.total,
+      }),
+    )
+  },
+
+  loadCart() {
+    const savedCart = sessionStorage.getItem("ftlCart")
+    if (savedCart) {
+      const parsedCart = JSON.parse(savedCart)
+      this.items = parsedCart.items || []
+      this.total = parsedCart.total || 0
+      this.updateCartUI()
+      this.updateCartCount()
+    }
+  },
+
+  updateCartCount() {
+    const cartCount = document.querySelector(".cart-count")
+    if (cartCount) {
+      const itemCount = this.items.reduce((count, item) => count + item.quantity, 0)
+      cartCount.textContent = itemCount
+      cartCount.style.display = itemCount > 0 ? "flex" : "none"
+    }
+  },
+
+  updateCartUI() {
+    const cartItemsContainer = document.querySelector(".cart-items")
+    if (!cartItemsContainer) return
+
+    cartItemsContainer.innerHTML = ""
+
+    if (this.items.length === 0) {
+      cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>'
+      document.querySelector(".cart-footer").style.display = "none"
+      return
+    }
+
+    document.querySelector(".cart-footer").style.display = "block"
+
+    this.items.forEach((item) => {
+      const cartItem = document.createElement("div")
+      cartItem.className = "cart-item"
+      cartItem.innerHTML = `
+         <div class="cart-item-image">
+           <img src="${item.image || "/placeholder.svg?height=60&width=60"}" alt="${item.name}">
+         </div>
+         <div class="cart-item-details">
+           <h4 class="cart-item-name">${item.name}</h4>
+           <div class="cart-item-meta">
+             <span>Size: ${item.size}</span>
+             <span>Color: ${item.color}</span>
+           </div>
+           <div class="cart-item-price">${item.price}</div>
+           <div class="cart-item-controls">
+             <button class="quantity-btn minus" data-id="${item.itemId}">-</button>
+             <span class="quantity">${item.quantity}</span>
+             <button class="quantity-btn plus" data-id="${item.itemId}">+</button>
+             <button class="remove-btn" data-id="${item.itemId}">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+             </button>
+           </div>
+         </div>
+       `
+
+      cartItemsContainer.appendChild(cartItem)
+    })
+
+    document.querySelector(".cart-total-amount").textContent = `$${this.total.toFixed(2)}`
+
+    document.querySelectorAll(".quantity-btn.minus").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id")
+        const item = this.items.find((item) => item.itemId === id)
+        if (item) {
+          this.updateQuantity(id, item.quantity - 1)
+        }
+      })
+    })
+
+    document.querySelectorAll(".quantity-btn.plus").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id")
+        const item = this.items.find((item) => item.itemId === id)
+        if (item) {
+          this.updateQuantity(id, item.quantity + 1)
+        }
+      })
+    })
+
+    document.querySelectorAll(".remove-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id")
+        this.removeItem(id)
+      })
+    })
+  },
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  // Check if we're on the index page and not coming from the loading page or product detail page
+  const comingFromLoading = sessionStorage.getItem("comingFromLoading")
+  const comingFromProductDetail = sessionStorage.getItem("comingFromProductDetail")
+
+  // If we're on the index page and not coming from loading page or product detail, redirect to loading
+  if (
+    !comingFromLoading &&
+    !comingFromProductDetail &&
+    (window.location.pathname.indexOf("index.html") !== -1 ||
+      window.location.pathname === "/" ||
+      window.location.pathname === "")
+  ) {
+    // Redirect to loading page
+    window.location.href = "loading.html"
+    return
+  }
+
+  // Create a smooth entrance animation when coming from loading page
+  if (comingFromLoading) {
+    // Create a transition overlay if it doesn't exist
+    let transitionOverlay = document.querySelector(".page-transition")
+    if (!transitionOverlay) {
+      transitionOverlay = document.createElement("div")
+      transitionOverlay.className = "page-transition"
+      transitionOverlay.style.position = "fixed"
+      transitionOverlay.style.top = "0"
+      transitionOverlay.style.left = "0"
+      transitionOverlay.style.width = "100%"
+      transitionOverlay.style.height = "100%"
+      transitionOverlay.style.backgroundColor = "#000"
+      transitionOverlay.style.zIndex = "9999"
+      transitionOverlay.style.opacity = "1"
+      transitionOverlay.style.transition = "opacity 1.5s ease"
+      document.body.appendChild(transitionOverlay)
+    } else {
+      transitionOverlay.style.opacity = "1"
+    }
+
+    // Fade out the overlay after a short delay
+    setTimeout(() => {
+      transitionOverlay.style.opacity = "0"
+
+      // Remove the overlay after transition completes
+      setTimeout(() => {
+        if (transitionOverlay.parentNode) {
+          transitionOverlay.parentNode.removeChild(transitionOverlay)
+        }
+      }, 1500)
+    }, 100)
+
+    // Apply entrance animations to main elements
+    const heroElements = [
+      document.querySelector(".main-logo"),
+      document.querySelector(".brand-name"),
+      document.querySelector(".tagline"),
+    ]
+
+    heroElements.forEach((element, index) => {
+      if (element) {
+        element.style.opacity = "0"
+        element.style.transform = "translateY(30px)"
+        element.style.transition = `opacity 1.5s ease ${index * 0.3 + 0.5}s, transform 1.5s ease ${index * 0.3 + 0.5}s`
+
+        setTimeout(() => {
+          element.style.opacity = "1"
+          element.style.transform = "translateY(0)"
+        }, 100)
+      }
+    })
+  }
+
+  // Clear the flags so next page refresh will show loading again
+  sessionStorage.removeItem("comingFromLoading")
+  sessionStorage.removeItem("comingFromProductDetail")
+
+  // Rest of your existing code...
   // Page transition for initial load
   const pageTransition = document.querySelector(".page-transition")
   if (pageTransition) {
@@ -59,186 +313,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize product sliders
   initProductSliders()
-
-  // Cart functionality
-  const cart = {
-    items: [],
-    total: 0,
-
-    addItem(product) {
-      const productCard = product.card
-      const sizeSelect = productCard ? productCard.querySelector(".product-size") : null
-      const colorSelect = productCard ? productCard.querySelector(".product-color") : null
-
-      const size = sizeSelect ? sizeSelect.value : "M"
-      const color = colorSelect ? colorSelect.value : "Black"
-
-      const itemId = `${product.id}-${size}-${color}`
-
-      const existingItem = this.items.find(
-        (item) => item.id === product.id && item.size === size && item.color === color,
-      )
-
-      if (existingItem) {
-        existingItem.quantity += 1
-      } else {
-        this.items.push({
-          ...product,
-          itemId,
-          size,
-          color,
-          quantity: 1,
-        })
-      }
-
-      this.updateTotal()
-      this.saveCart()
-      this.updateCartUI()
-      this.updateCartCount()
-    },
-
-    removeItem(itemId) {
-      const index = this.items.findIndex((item) => item.itemId === itemId)
-      if (index !== -1) {
-        this.items.splice(index, 1)
-        this.updateTotal()
-        this.saveCart()
-        this.updateCartUI()
-        this.updateCartCount()
-      }
-    },
-
-    updateQuantity(itemId, quantity) {
-      const item = this.items.find((item) => item.itemId === itemId)
-      if (item) {
-        item.quantity = quantity
-        if (item.quantity <= 0) {
-          this.removeItem(itemId)
-        } else {
-          this.updateTotal()
-          this.saveCart()
-          this.updateCartUI()
-          this.updateCartCount()
-        }
-      }
-    },
-
-    updateTotal() {
-      this.total = this.items.reduce((sum, item) => {
-        return sum + Number.parseFloat(item.price.replace("$", "")) * item.quantity
-      }, 0)
-    },
-
-    clearCart() {
-      this.items = []
-      this.total = 0
-      this.saveCart()
-      this.updateCartUI()
-      this.updateCartCount()
-    },
-
-    saveCart() {
-      sessionStorage.setItem(
-        "ftlCart",
-        JSON.stringify({
-          items: this.items,
-          total: this.total,
-        }),
-      )
-    },
-
-    loadCart() {
-      const savedCart = sessionStorage.getItem("ftlCart")
-      if (savedCart) {
-        const parsedCart = JSON.parse(savedCart)
-        this.items = parsedCart.items || []
-        this.total = parsedCart.total || 0
-        this.updateCartUI()
-        this.updateCartCount()
-      }
-    },
-
-    updateCartCount() {
-      const cartCount = document.querySelector(".cart-count")
-      if (cartCount) {
-        const itemCount = this.items.reduce((count, item) => count + item.quantity, 0)
-        cartCount.textContent = itemCount
-        cartCount.style.display = itemCount > 0 ? "flex" : "none"
-      }
-    },
-
-    updateCartUI() {
-      const cartItemsContainer = document.querySelector(".cart-items")
-      if (!cartItemsContainer) return
-
-      cartItemsContainer.innerHTML = ""
-
-      if (this.items.length === 0) {
-        cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>'
-        document.querySelector(".cart-footer").style.display = "none"
-        return
-      }
-
-      document.querySelector(".cart-footer").style.display = "block"
-
-      this.items.forEach((item) => {
-        const cartItem = document.createElement("div")
-        cartItem.className = "cart-item"
-        cartItem.innerHTML = `
-          <div class="cart-item-image">
-            <img src="${item.image || "/placeholder.svg?height=60&width=60"}" alt="${item.name}">
-          </div>
-          <div class="cart-item-details">
-            <h4 class="cart-item-name">${item.name}</h4>
-            <div class="cart-item-meta">
-              <span>Size: ${item.size}</span>
-              <span>Color: ${item.color}</span>
-            </div>
-            <div class="cart-item-price">${item.price}</div>
-            <div class="cart-item-controls">
-              <button class="quantity-btn minus" data-id="${item.itemId}">-</button>
-              <span class="quantity">${item.quantity}</span>
-              <button class="quantity-btn plus" data-id="${item.itemId}">+</button>
-              <button class="remove-btn" data-id="${item.itemId}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
-              </button>
-            </div>
-          </div>
-        `
-
-        cartItemsContainer.appendChild(cartItem)
-      })
-
-      document.querySelector(".cart-total-amount").textContent = `$${this.total.toFixed(2)}`
-
-      document.querySelectorAll(".quantity-btn.minus").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const id = btn.getAttribute("data-id")
-          const item = this.items.find((item) => item.itemId === id)
-          if (item) {
-            this.updateQuantity(id, item.quantity - 1)
-          }
-        })
-      })
-
-      document.querySelectorAll(".quantity-btn.plus").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const id = btn.getAttribute("data-id")
-          const item = this.items.find((item) => item.itemId === id)
-          if (item) {
-            this.updateQuantity(id, item.quantity + 1)
-          }
-        })
-      })
-
-      document.querySelectorAll(".remove-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const id = btn.getAttribute("data-id")
-          this.removeItem(id)
-        })
-      })
-    },
-  }
 
   // Initialize cart
   cart.loadCart()
@@ -538,12 +612,12 @@ document.addEventListener("DOMContentLoaded", () => {
         resultItem.href = "#"
         resultItem.className = "search-result-item"
         resultItem.innerHTML = `
-          <img src="${product.image}" alt="${product.name}" class="search-result-image">
-          <div class="search-result-info">
-            <div class="search-result-name">${product.name}</div>
-            <div class="search-result-price">${product.price}</div>
-          </div>
-        `
+         <img src="${product.image}" alt="${product.name}" class="search-result-image">
+         <div class="search-result-info">
+           <div class="search-result-name">${product.name}</div>
+           <div class="search-result-price">${product.price}</div>
+         </div>
+       `
 
         resultItem.addEventListener("click", (e) => {
           e.preventDefault()
@@ -695,8 +769,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Product detail view functionality
   document.querySelectorAll(".product-card").forEach((card, index) => {
     // Get the product info
-    const productName = card.querySelector(".product-name").textContent;
-    const productId = index + 1; // Assuming IDs match the order
+    const productName = card.querySelector(".product-name").textContent
+    const productId = index + 1 // Assuming IDs match the order
 
     // Make the card clickable to view details
     card.addEventListener("click", (e) => {
@@ -708,13 +782,13 @@ document.addEventListener("DOMContentLoaded", () => {
         e.target.tagName === "LABEL" ||
         e.target.closest(".slider-nav")
       ) {
-        return;
+        return
       }
 
       // Navigate directly without transition
-      window.location.href = `product-detail.html?id=${productId}`;
-    });
-  });
+      window.location.href = `product-detail.html?id=${productId}`
+    })
+  })
 })
 
 // Lightning effect
@@ -749,91 +823,91 @@ function initLightning() {
   }
 
   const vertexShaderSource = `
-    attribute vec2 aPosition;
-    void main() {
-      gl_Position = vec4(aPosition, 0.0, 1.0);
-    }
-  `
+   attribute vec2 aPosition;
+   void main() {
+     gl_Position = vec4(aPosition, 0.0, 1.0);
+   }
+ `
 
   const fragmentShaderSource = `
-    precision mediump float;
-    uniform vec2 iResolution;
-    uniform float iTime;
-    uniform float uHue;
-    uniform float uXOffset;
-    uniform float uSpeed;
-    uniform float uIntensity;
-    uniform float uSize;
-    
-    #define OCTAVE_COUNT 10
+   precision mediump float;
+   uniform vec2 iResolution;
+   uniform float iTime;
+   uniform float uHue;
+   uniform float uXOffset;
+   uniform float uSpeed;
+   uniform float uIntensity;
+   uniform float uSize;
+   
+   #define OCTAVE_COUNT 10
 
-    vec3 hsv2rgb(vec3 c) {
-        vec3 rgb = clamp(abs(mod(c.x * 6.0 + vec3(0.0,4.0,2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
-        return c.z * mix(vec3(1.0), rgb, c.y);
-    }
+   vec3 hsv2rgb(vec3 c) {
+       vec3 rgb = clamp(abs(mod(c.x * 6.0 + vec3(0.0,4.0,2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
+       return c.z * mix(vec3(1.0), rgb, c.y);
+   }
 
-    float hash11(float p) {
-        p = fract(p * .1031);
-        p *= p + 33.33;
-        p *= p + p;
-        return fract(p);
-    }
+   float hash11(float p) {
+       p = fract(p * .1031);
+       p *= p + 33.33;
+       p *= p + p;
+       return fract(p);
+   }
 
-    float hash12(vec2 p) {
-        vec3 p3 = fract(vec3(p.xyx) * .1031);
-        p3 += dot(p3, p3.yzx + 33.33);
-        return fract((p3.x + p3.y) * p3.z);
-    }
+   float hash12(vec2 p) {
+       vec3 p3 = fract(vec3(p.xyx) * .1031);
+       p3 += dot(p3, p3.yzx + 33.33);
+       return fract((p3.x + p3.y) * p3.z);
+   }
 
-    mat2 rotate2d(float theta) {
-        float c = cos(theta);
-        float s = sin(theta);
-        return mat2(c, -s, s, c);
-    }
+   mat2 rotate2d(float theta) {
+       float c = cos(theta);
+       float s = sin(theta);
+       return mat2(c, -s, s, c);
+   }
 
-    float noise(vec2 p) {
-        vec2 ip = floor(p);
-        vec2 fp = fract(p);
-        float a = hash12(ip);
-        float b = hash12(ip + vec2(1.0, 0.0));
-        float c = hash12(ip + vec2(0.0, 1.0));
-        float d = hash12(ip + vec2(1.0, 1.0));
-        
-        vec2 t = smoothstep(0.0, 1.0, fp);
-        return mix(mix(a, b, t.x), mix(c, d, t.x), t.y);
-    }
+   float noise(vec2 p) {
+       vec2 ip = floor(p);
+       vec2 fp = fract(p);
+       float a = hash12(ip);
+       float b = hash12(ip + vec2(1.0, 0.0));
+       float c = hash12(ip + vec2(0.0, 1.0));
+       float d = hash12(ip + vec2(1.0, 1.0));
+       
+       vec2 t = smoothstep(0.0, 1.0, fp);
+       return mix(mix(a, b, t.x), mix(c, d, t.x), t.y);
+   }
 
-    float fbm(vec2 p) {
-        float value = 0.0;
-        float amplitude = 0.5;
-        for (int i = 0; i < OCTAVE_COUNT; ++i) {
-            value += amplitude * noise(p);
-            p *= rotate2d(0.45);
-            p *= 2.0;
-            amplitude *= 0.5;
-        }
-        return value;
-    }
+   float fbm(vec2 p) {
+       float value = 0.0;
+       float amplitude = 0.5;
+       for (int i = 0; i < OCTAVE_COUNT; ++i) {
+           value += amplitude * noise(p);
+           p *= rotate2d(0.45);
+           p *= 2.0;
+           amplitude *= 0.5;
+       }
+       return value;
+   }
 
-    void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
-        vec2 uv = fragCoord / iResolution.xy;
-        uv = 2.0 * uv - 1.0;
-        uv.x *= iResolution.x / iResolution.y;
-        uv.x += uXOffset;
-        
-        uv += 2.0 * fbm(uv * uSize + 0.8 * iTime * uSpeed) - 1.0;
-        
-        float dist = abs(uv.x);
-        vec3 baseColor = hsv2rgb(vec3(uHue / 360.0, 0.7, 0.8));
-        vec3 col = baseColor * pow(mix(0.0, 0.07, hash11(iTime * uSpeed)) / dist, 1.0) * uIntensity;
-        col = pow(col, vec3(1.0));
-        fragColor = vec4(col, 1.0);
-    }
+   void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
+       vec2 uv = fragCoord / iResolution.xy;
+       uv = 2.0 * uv - 1.0;
+       uv.x *= iResolution.x / iResolution.y;
+       uv.x += uXOffset;
+       
+       uv += 2.0 * fbm(uv * uSize + 0.8 * iTime * uSpeed) - 1.0;
+       
+       float dist = abs(uv.x);
+       vec3 baseColor = hsv2rgb(vec3(uHue / 360.0, 0.7, 0.8));
+       vec3 col = baseColor * pow(mix(0.0, 0.07, hash11(iTime * uSpeed)) / dist, 1.0) * uIntensity;
+       col = pow(col, vec3(1.0));
+       fragColor = vec4(col, 1.0);
+   }
 
-    void main() {
-        mainImage(gl_FragColor, gl_FragCoord.xy);
-    }
-  `
+   void main() {
+       mainImage(gl_FragColor, gl_FragCoord.xy);
+   }
+ `
 
   const compileShader = (source, type) => {
     const shader = gl.createShader(type)
@@ -913,3 +987,4 @@ window.cart = cart
 
 // Make the products array globally accessible
 window.products = products
+
