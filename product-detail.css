@@ -23,6 +23,16 @@
     gap: 1rem;
   }
   
+  .coming-soon-image {
+    transition: all 0.5s ease;
+    position: relative;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  
   .product-detail-main-image {
     width: 100%;
     height: 500px;
@@ -32,15 +42,89 @@
     justify-content: center;
     border-radius: 5px;
     overflow: hidden;
-    position: relative; /* Add position relative for zoom container */
-    cursor: zoom-in; /* Change cursor to indicate zoom functionality */
+    position: relative;
+    cursor: zoom-in;
   }
   
   .product-detail-main-image img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    transition: transform 0.3s ease; /* Add smooth transition for zoom effect */
+    transition: transform 0.3s ease;
+  }
+  
+  /* Coming Soon Image Hover Effects */
+  
+  .product-detail-main-image .coming-soon-image:hover {
+    transform: scale(1.1) rotate(3deg);
+    filter: drop-shadow(0 0 20px rgba(193, 0, 0, 0.8));
+    animation: pulse-glow 2s infinite;
+  }
+  
+  .thumbnail .coming-soon-image:hover {
+    transform: scale(1.1) rotate(-3deg);
+    filter: brightness(1.2);
+  }
+  
+  /* Pulse glow animation */
+  @keyframes pulse-glow {
+    0% {
+      filter: drop-shadow(0 0 5px rgba(193, 0, 0, 0.5));
+    }
+    50% {
+      filter: drop-shadow(0 0 20px rgba(193, 0, 0, 0.8));
+    }
+    100% {
+      filter: drop-shadow(0 0 5px rgba(193, 0, 0, 0.5));
+    }
+  }
+  
+  /* 3D flip effect on hover for thumbnails */
+  .thumbnail {
+    perspective: 1000px;
+    overflow: visible;
+  }
+  
+  .thumbnail:hover .coming-soon-image {
+    transform: rotateY(180deg);
+    transition: transform 0.6s;
+  }
+  
+  /* Cross shine effect */
+  .coming-soon-image::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      to bottom right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, 0.4) 50%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(45deg);
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.5s ease;
+  }
+  
+  .product-detail-main-image:hover .coming-soon-image::after {
+    opacity: 1;
+    animation: shine 1.5s infinite;
+  }
+  
+  @keyframes shine {
+    0% {
+      transform: rotate(45deg) translateX(-100%);
+    }
+    100% {
+      transform: rotate(45deg) translateX(100%);
+    }
   }
   
   .product-detail-thumbnails {
@@ -150,25 +234,31 @@
     transform: translateX(-3px);
   }
   
-  /* Add zoom container styles */
-  .zoom-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  /* Zoom effect for product detail page */
+  .product-detail-main-image {
     overflow: hidden;
-    z-index: 10;
+    cursor: zoom-in;
   }
   
-  .zoom-container.active {
-    cursor: zoom-out;
+  .product-detail-main-image .coming-soon-image {
+    transition: transform 0.5s ease;
   }
   
-  .zoom-container.active img {
-    transform: scale(2.5);
-    transform-origin: var(--x) var(--y);
-    object-fit: contain;
+  .product-detail-main-image:hover .coming-soon-image {
+    transform: scale(1.2);
+  }
+  
+  /* Floating effect */
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
   }
   
   /* Responsive styles */
@@ -205,3 +295,5 @@
       gap: 1rem;
     }
   }
+  
+  
