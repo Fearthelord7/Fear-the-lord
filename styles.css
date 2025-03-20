@@ -4,6 +4,7 @@
   --color-text: #ffffff;
   --color-accent: #c10000;
   --color-accent-hover: #ff0000;
+  --color-accent-glow: rgba(255, 0, 0, 0.5);
   --color-gray: #333333;
   --color-light-gray: #444444;
   --font-gothic: "UnifrakturMaguntia", serif;
@@ -202,13 +203,23 @@ nav {
 .logo-animation {
   margin-bottom: 2rem;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  width: 300px;
+  height: 300px;
 }
 
 .main-logo {
-  width: 300px;
-  height: auto;
+  width: 100%;
+  height: 100%;
   filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.7));
-  animation: pulse 4s infinite ease-in-out;
+  position: absolute;
+  transform-style: preserve-3d;
+  animation: rotate3d 8s linear infinite;
+  backface-visibility: visible;
   background-color: transparent;
   mix-blend-mode: normal;
   object-fit: contain;
@@ -283,16 +294,17 @@ nav {
   background-color: var(--color-accent);
 }
 
+/* Update collection grid for 3 products */
 .collection-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   max-width: 1400px;
   margin: 0 auto;
 }
 
 /* Make sure the last row products don't have any unwanted background */
-.collection-grid .product-card:nth-last-child(-n+4) {
+.collection-grid .product-card:nth-last-child(-n + 4) {
   background-color: #000000 !important;
   margin-bottom: 2rem !important;
 }
@@ -340,11 +352,9 @@ nav {
   opacity: 1;
 }
 
-/* Remove transparent elements in the last two products */
-/* Update this selector to specifically target the last two products */
-.collection-grid .product-card:nth-last-child(-n+2)::after {
-  display: none !important;
-}
+/* Remove this selector that's hiding the "View Details" overlay on products 2 and 3 */
+/* Replace with this selector that doesn't hide any overlays for our 3 products */
+/* If we need to hide overlays for specific products, we can target them by class instead */
 
 /* UPDATED Product Slider */
 .product-slider {
@@ -451,11 +461,67 @@ nav {
   font-weight: 700;
 }
 
+/* Add these styles for the sale price display */
 .product-price {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.original-price {
+  color: #888;
+  text-decoration: line-through;
+  font-size: 0.9rem;
+}
+
+.sale-price {
   color: var(--color-accent);
   font-weight: 700;
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.sale-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: var(--color-accent);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-radius: 3px;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transform: rotate(5deg);
+}
+
+.sale-badge::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: scaleX(0);
+    opacity: 0.5;
+  }
+  20% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
 }
 
 /* UPDATED Product Options */
@@ -1101,6 +1167,26 @@ footer {
   }
 }
 
+/* Add this spinning animation for the main logo */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Add a new 3D rotation keyframes animation */
+@keyframes rotate3d {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+
 /* Search functionality */
 .search-container {
   position: fixed;
@@ -1238,6 +1324,26 @@ footer {
   font-weight: 700;
 }
 
+/* Add styles for search result prices to match collection style */
+
+.search-result-price {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.search-result-price .original-price {
+  color: #888;
+  text-decoration: line-through;
+  font-size: 0.9rem;
+}
+
+.search-result-price .sale-price {
+  color: var(--color-accent);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
 .no-results {
   padding: 1rem;
   text-align: center;
@@ -1297,22 +1403,18 @@ footer {
   }
 }
 
+/* Media query updates for 3 products */
 @media (max-width: 992px) {
+  .collection-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .nav-links {
     gap: 1.5rem;
   }
 
   .brand-name {
     font-size: 4rem;
-  }
-
-  .collection-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .collection-grid .product-card:nth-last-child(-n + 2) {
-    background-color: #000000 !important;
-    margin-bottom: 0;
   }
 
   .contact-grid {
@@ -1384,9 +1486,15 @@ footer {
     grid-template-columns: 1fr;
   }
 
-  .collection-grid .product-card:last-child {
-    background-color: #000000 !important;
-    margin-bottom: 0;
+  /* Media query updates for 3 products */
+  @media (max-width: 576px) {
+    .collection-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1448,3 +1556,4 @@ footer {
     opacity: 1;
   }
 }
+
