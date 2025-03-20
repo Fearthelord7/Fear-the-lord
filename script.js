@@ -3,44 +3,26 @@ const products = [
   {
     id: 1,
     name: "FTL OG T-shirt",
-    price: "$49.99",
-    image: "/placeholder.svg?height=60&width=60",
+    price: "$39.99",
+    originalPrice: "$59.99",
+    image:
+      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FTL%20og%20logo%20shirt-IkqmEnUSFFNJu7qkffZDppmOkoHn29.png",
   },
   {
     id: 2,
-    name: "FTL OG Hoodie",
-    price: "$69.99",
-    image: "/placeholder.svg?height=60&width=60",
+    name: "FTL Shorts",
+    price: "$44.99",
+    originalPrice: "$64.99",
+    image:
+      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FTL%20shorts%20front-RR2CD01ba3XKgL5heWrBHDRXawGmHJ.png",
   },
   {
     id: 3,
-    name: "FTL Shorts",
-    price: "$129.99",
-    image: "/placeholder.svg?height=60&width=60",
-  },
-  {
-    id: 4,
-    name: "FTL Jesus Saves Shorts",
-    price: "$89.99",
-    image: "/placeholder.svg?height=60&width=60",
-  },
-  {
-    id: 5,
-    name: "FTL Faith Over Fear T-shirt",
-    price: "$34.99",
-    image: "/placeholder.svg?height=60&width=60",
-  },
-  {
-    id: 6,
-    name: "Side Cross FTL T-Shirt",
-    price: "$29.99",
-    image: "/placeholder.svg?height=60&width=60",
-  },
-  {
-    id: 7,
-    name: "Jesus Saves FTL T-Shirt",
-    price: "$19.99",
-    image: "/placeholder.svg?height=60&width=60",
+    name: "FTL OG Hoodie",
+    price: "$70.00",
+    originalPrice: "$95.00",
+    image:
+      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FTL%20hoodie%20front-qZlX6uB6JaNsJpbWzY3W2XSJOh5YcU.png",
   },
 ]
 
@@ -70,6 +52,7 @@ const cart = {
         size,
         color,
         quantity: 1,
+        originalPrice: product.originalPrice || null,
       })
     }
 
@@ -223,80 +206,14 @@ const cart = {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Check if we're on the index page and not coming from the loading page or product detail page
-  const comingFromLoading = sessionStorage.getItem("comingFromLoading")
-  const comingFromProductDetail = sessionStorage.getItem("comingFromProductDetail")
+  // Initialize lightning effect
+  initLightning()
 
-  // If we're on the index page and not coming from loading page or product detail, redirect to loading
-  if (
-    !comingFromLoading &&
-    !comingFromProductDetail &&
-    (window.location.pathname.indexOf("index.html") !== -1 ||
-      window.location.pathname === "/" ||
-      window.location.pathname === "")
-  ) {
-    // Redirect to loading page
-    window.location.href = "loading.html"
-    return
-  }
+  // Initialize product sliders
+  initProductSliders()
 
-  // Create a smooth entrance animation when coming from loading page
-  if (comingFromLoading) {
-    // Create a transition overlay if it doesn't exist
-    let transitionOverlay = document.querySelector(".page-transition")
-    if (!transitionOverlay) {
-      transitionOverlay = document.createElement("div")
-      transitionOverlay.className = "page-transition"
-      transitionOverlay.style.position = "fixed"
-      transitionOverlay.style.top = "0"
-      transitionOverlay.style.left = "0"
-      transitionOverlay.style.width = "100%"
-      transitionOverlay.style.height = "100%"
-      transitionOverlay.style.backgroundColor = "#000"
-      transitionOverlay.style.zIndex = "9999"
-      transitionOverlay.style.opacity = "1"
-      transitionOverlay.style.transition = "opacity 1.5s ease"
-      document.body.appendChild(transitionOverlay)
-    } else {
-      transitionOverlay.style.opacity = "1"
-    }
-
-    // Fade out the overlay after a short delay
-    setTimeout(() => {
-      transitionOverlay.style.opacity = "0"
-
-      // Remove the overlay after transition completes
-      setTimeout(() => {
-        if (transitionOverlay.parentNode) {
-          transitionOverlay.parentNode.removeChild(transitionOverlay)
-        }
-      }, 1500)
-    }, 100)
-
-    // Apply entrance animations to main elements
-    const heroElements = [
-      document.querySelector(".main-logo"),
-      document.querySelector(".brand-name"),
-      document.querySelector(".tagline"),
-    ]
-
-    heroElements.forEach((element, index) => {
-      if (element) {
-        element.style.opacity = "0"
-        element.style.transform = "translateY(30px)"
-        element.style.transition = `opacity 1.5s ease ${index * 0.3 + 0.5}s, transform 1.5s ease ${index * 0.3 + 0.5}s`
-
-        setTimeout(() => {
-          element.style.opacity = "1"
-          element.style.transform = "translateY(0)"
-        }, 100)
-      }
-    })
-  }
-
-  // Clear the flags so next page refresh will show loading again
-  sessionStorage.removeItem("comingFromLoading")
-  sessionStorage.removeItem("comingFromProductDetail")
+  // Initialize cart
+  cart.loadCart()
 
   // Rest of your existing code...
   // Page transition for initial load
@@ -308,22 +225,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500)
   }
 
-  // Initialize lightning effect
-  initLightning()
-
-  // Initialize product sliders
-  initProductSliders()
-
-  // Initialize cart
-  cart.loadCart()
-
   // Add to cart functionality
   const productButtons = document.querySelectorAll(".product-button")
   productButtons.forEach((button, index) => {
     button.addEventListener("click", () => {
       const productCard = button.closest(".product-card")
       const productName = productCard.querySelector(".product-name").textContent
-      const productPrice = productCard.querySelector(".product-price").textContent
+      const salePriceElement = productCard.querySelector(".sale-price")
+      const originalPriceElement = productCard.querySelector(".original-price")
+
+      const salePrice = salePriceElement ? salePriceElement.textContent : null
+      const originalPrice = originalPriceElement ? originalPriceElement.textContent : null
 
       // Get the current active slide image for the product
       const sliderTrack = productCard.querySelector(".slider-track")
@@ -334,7 +246,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const product = {
         id: index + 1,
         name: productName,
-        price: productPrice,
+        price: salePrice || productCard.querySelector(".product-price").textContent,
+        originalPrice: originalPrice,
         image: productImage,
         card: productCard,
       }
@@ -534,7 +447,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const productCards = document.querySelectorAll(".product-card")
     return Array.from(productCards).map((card, index) => {
       const name = card.querySelector(".product-name").textContent
-      const price = card.querySelector(".product-price").textContent
+      const salePriceElement = card.querySelector(".sale-price")
+      const originalPriceElement = card.querySelector(".original-price")
+
+      const salePrice = salePriceElement ? salePriceElement.textContent : null
+      const originalPrice = originalPriceElement ? originalPriceElement.textContent : null
+      const price = salePrice || card.querySelector(".product-price").textContent
+
       const firstSlide = card.querySelector(".slider-slide")
       const image = firstSlide.querySelector("img").src
 
@@ -542,6 +461,7 @@ document.addEventListener("DOMContentLoaded", () => {
         id: index + 1,
         name,
         price,
+        originalPrice,
         image,
         card,
       }
@@ -549,7 +469,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Get products with actual images
-  const products = getAllProducts()
+  const pageProducts = getAllProducts()
 
   if (searchToggle) {
     searchToggle.addEventListener("click", (e) => {
@@ -602,7 +522,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (query.length < 2) return
 
-    const filteredProducts = products.filter((product) => product.name.toLowerCase().includes(query))
+    const filteredProducts = pageProducts.filter((product) => product.name.toLowerCase().includes(query))
 
     searchResults.innerHTML = ""
 
@@ -611,13 +531,25 @@ document.addEventListener("DOMContentLoaded", () => {
         const resultItem = document.createElement("a")
         resultItem.href = "#"
         resultItem.className = "search-result-item"
+
+        // Update this part to show prices like in the collection
+        let priceHTML = `<div class="search-result-price">${product.price}</div>`
+        if (product.originalPrice) {
+          priceHTML = `
+            <div class="search-result-price">
+              <span class="original-price">${product.originalPrice}</span>
+              <span class="sale-price">${product.price}</span>
+            </div>
+          `
+        }
+
         resultItem.innerHTML = `
-         <img src="${product.image}" alt="${product.name}" class="search-result-image">
-         <div class="search-result-info">
-           <div class="search-result-name">${product.name}</div>
-           <div class="search-result-price">${product.price}</div>
-         </div>
-       `
+          <img src="${product.image}" alt="${product.name}" class="search-result-image">
+          <div class="search-result-info">
+            <div class="search-result-name">${product.name}</div>
+            ${priceHTML}
+          </div>
+        `
 
         resultItem.addEventListener("click", (e) => {
           e.preventDefault()
@@ -964,6 +896,7 @@ function initLightning() {
   gl.useProgram(program) // Ensure gl.useProgram is always called
 
   const render = () => {
+    gl.useProgram(program)
     gl.viewport(0, 0, canvas.width, canvas.height)
     gl.uniform2f(iResolutionLocation, canvas.width, canvas.height)
     const currentTime = performance.now()
