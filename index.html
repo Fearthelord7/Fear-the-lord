@@ -1,372 +1,432 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fear the Lord</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fear The Lord - Coming Soon</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:wght@300;400;600&display=swap');
 
- <!-- Standard Favicon configuration -->
-    <link rel="icon" type="image/png" sizes="32x32" href="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/favicon-32x32-kX7IEBC4dnpW3IJF938u0wejLm6Ucc.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/favicon-16x16-K5fTNgb4SuneFx8Ph8egpuvlr23lmV.png">
-    
-    <!-- Apple/Safari specific icons and meta tags -->
-    <link rel="apple-touch-icon" sizes="180x180" href="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/apple-touch-icon-AJeEGDqyLJ8qeNpPpVK7IRjZhcSMwm.png">
-    <link rel="mask-icon" href="safari-pinned-tab.svg" color="#c10000">
-    <meta name="apple-mobile-web-app-title" content="Fear the Lord">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-   
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <link rel="stylesheet" href="styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
-  <!-- Add Stripe.js -->
-  <script src="https://js.stripe.com/v3/"></script>
+        body {
+            background-color: #000; /* Pure black background */
+            color: #fff;
+            font-family: 'Cormorant Garamond', serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000; /* Pure black background */
+            z-index: -2;
+        }
+
+        .lightning {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(to bottom, transparent, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, transparent);
+            z-index: -1;
+            opacity: 0;
+            filter: blur(2px);
+            box-shadow: 0 0 20px 2px rgba(255, 255, 255, 0.8),
+                        0 0 40px 6px rgba(255, 255, 255, 0.6),
+                        0 0 60px 10px rgba(255, 255, 255, 0.4);
+            transform: translateX(-50%) scaleY(0);
+            transform-origin: top;
+        }
+
+        .lightning-flash {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.05);
+            z-index: -1;
+            opacity: 0;
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            width: 240px;
+            height: 240px;
+            margin: 0 auto 2rem;
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9)) brightness(1.2); /* White glow effect */
+            position: relative;
+            z-index: 2;
+            animation: crossGlow 3s ease-in-out infinite;
+        }
+
+        /* Added more space between logo and title */
+        .title {
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-top: 1rem; /* Added margin-top */
+            margin-bottom: 1rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
+                         0 0 20px rgba(255, 255, 255, 0.5);
+            letter-spacing: 2px;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            color: #ccc;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .countdown-value {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            position: relative;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .countdown-value::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            z-index: -1;
+        }
+
+        .countdown-value::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            width: calc(100% + 10px);
+            height: calc(100% + 10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 7px;
+            z-index: -1;
+        }
+
+        .countdown-label {
+            font-size: 1rem;
+            color: #aaa;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes crossGlow {
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9)) brightness(1.2); }
+            50% { filter: drop-shadow(0 0 25px rgba(255, 255, 255, 1)) brightness(1.4); }
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.5); }
+            50% { text-shadow: 0 0 15px rgba(255, 255, 255, 1), 0 0 30px rgba(255, 255, 255, 0.7), 0 0 45px rgba(255, 255, 255, 0.4); }
+        }
+
+        @keyframes lightningFlash {
+            0%, 100% { opacity: 0; }
+            10%, 90% { opacity: 0.1; }
+            20%, 80% { opacity: 0.2; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes lightningStrike {
+            0% { transform: translateX(-50%) scaleY(0); opacity: 0; }
+            10% { transform: translateX(-50%) scaleY(0.3); opacity: 0.7; }
+            20% { transform: translateX(-50%) scaleY(0.5); opacity: 0.9; }
+            30% { transform: translateX(-50%) scaleY(0.7); opacity: 1; }
+            40% { transform: translateX(-50%) scaleY(0.9); opacity: 0.9; }
+            50% { transform: translateX(-50%) scaleY(1); opacity: 1; }
+            60% { transform: translateX(-50%) scaleY(0.9); opacity: 0.9; }
+            70% { transform: translateX(-50%) scaleY(0.7); opacity: 0.8; }
+            80% { transform: translateX(-50%) scaleY(0.5); opacity: 0.6; }
+            90% { transform: translateX(-50%) scaleY(0.3); opacity: 0.3; }
+            100% { transform: translateX(-50%) scaleY(0); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            .countdown {
+                gap: 1rem;
+            }
+            .countdown-value {
+                font-size: 2.5rem;
+                width: 70px;
+                height: 70px;
+            }
+            .logo {
+                width: 180px;
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .countdown {
+                flex-wrap: wrap;
+            }
+            .countdown-item {
+                width: 40%;
+                margin-bottom: 1rem;
+            }
+            .logo {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="noise"></div>
-  <div id="lightning-container"></div>
-  
-  <header>
-    <nav>
-      <div class="nav-container">
-        <a href="#" class="logo-small mobile-toggle">FTL</a>
-        <ul class="nav-links">
-          <li><a href="#top" class="active">Home</a></li>
-          <li><a href="#collection">Collection</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-        <div class="nav-icons">
-          <span class="icon-link search-toggle">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
-          </span>
-          <a href="#" class="icon-link cart-toggle">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-            <span class="cart-count">0</span>
-          </a>
-        </div>
-      </div>
-    </nav>
-  </header>
+    <div class="background"></div>
+    <div class="lightning"></div>
+    <div class="lightning-flash"></div>
+    <div class="particles" id="particles"></div>
 
-  <!-- Cart Container -->
-  <div class="cart-container">
-    <div class="cart-overlay"></div>
-    <div class="cart-drawer">
-      <div class="cart-header">
-        <h3>Your Cart</h3>
-        <button class="cart-close">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
-        </button>
-      </div>
-      <div class="cart-items">
-        <!-- Cart items will be dynamically added here -->
-        <div class="empty-cart">Your cart is empty</div>
-      </div>
-      <div class="cart-footer">
-        <div class="cart-total">
-          <span>Total:</span>
-          <span class="cart-total-amount">$0.00</span>
+    <div class="container">
+        <div class="logo">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FTL_logo_cross-removebg-preview_enhanced-r1dsk2VptyVL2SMJDZ6LKeO7BEpVDb.png" alt="Fear The Lord Cross Logo">
         </div>
-        <button class="checkout-btn">Proceed to Checkout</button>
-      </div>
+        
+        <h1 class="title">Fear The Lord</h1>
+        <p class="subtitle">Saved by His Grace</p>
+        
+        <div class="countdown" id="countdown">
+            <div class="countdown-item">
+                <div class="countdown-value" id="days">00</div>
+                <div class="countdown-label">Days</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="hours">00</div>
+                <div class="countdown-label">Hours</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="minutes">00</div>
+                <div class="countdown-label">Minutes</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="seconds">00</div>
+                <div class="countdown-label">Seconds</div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- Search Container -->
-  <div class="search-container">
-    <button class="search-close">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
-    </button>
-    <form class="search-form">
-      <input type="text" class="search-input" placeholder="Search for products..." autocomplete="off">
-      <button type="submit" class="search-submit">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
-      </button>
-      <div class="search-results"></div>
-    </form>
-  </div>
+    <script>
+        // Fixed countdown script
+        // Set the release date - May 1st
+        function getTargetDate() {
+            // Set the target date to May 1st, 2025 specifically
+            return new Date('May 1, 2025 00:00:00');
+        }
 
-  <main id="top">
-    <section class="hero">
-      <div class="logo-container">
-        <div class="logo-animation">
-          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FTL_logo_cross-removebg-preview_enhanced-GBjK00GNoOBDiUeGpNZU3UP6Gu7GCW.png" alt="Fear the Lord Logo" class="main-logo">
-        </div>
-        <h1 class="brand-name">Fear the Lord</h1>
-        <p class="tagline">Saved by His Grace</p>
-      </div>
-    </section>
-    
-    <section id="collection" class="collection">
-      <h2 class="section-title">Our Collection</h2>
-      <div class="collection-grid">
-        <!-- Product 1 - FTL OG T-shirt -->
-        <div class="product-card">
-          <div class="sale-badge">SALE</div>
-          <div class="product-slider">
-            <div class="slider-container">
-              <div class="slider-track">
-                <div class="slider-slide">
-                  <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FTL%20og%20logo%20shirt-IkqmEnUSFFNJu7qkffZDppmOkoHn29.png" alt="FTL T-shirt Front View" class="product-image">
-                </div>
-                <div class="slider-slide">
-                  <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FTL%20red%20logo%20shirt%20back-eDzdfQ25qvLL34YLUlhtdBrmLWNNAb.png" alt="FTL T-shirt Back View" class="product-image">
-                </div>
-              </div>
-              <div class="slider-nav">
-                <button class="slider-prev">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
-                </button>
-                <div class="slider-dots"></div>
-                <button class="slider-next">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="product-info">
-            <h3 class="product-name">FTL OG T-shirt</h3>
-            <div class="product-price">
-              <span class="original-price">$59.99</span>
-              <span class="sale-price">$39.99</span>
-            </div>
-            <div class="product-options">
-              <div class="option-group">
-                <label>Size:</label>
-                <select class="product-size">
-                  <option>S</option>
-                  <option selected>M</option>
-                  <option>L</option>
-                  <option>XL</option>
-                </select>
-              </div>
-              <div class="option-group">
-                <label>Color:</label>
-                <select class="product-color">
-                  <option selected>Black</option>
-                  <option>White</option>
-                  <option>Red</option>
-                </select>
-              </div>
-            </div>
-            <button class="product-button">Add to Cart</button>
-          </div>
-        </div>
-        
-        <!-- Product 2 - FTL Shorts -->
-        <div class="product-card">
-          <div class="sale-badge">SALE</div>
-          <div class="product-slider">
-            <div class="slider-container">
-              <div class="slider-track">
-                <div class="slider-slide">
-                  <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FTL%20shorts%20front-RR2CD01ba3XKgL5heWrBHDRXawGmHJ.png" alt="FTL Shorts Front View" class="product-image">
-                </div>
-                <div class="slider-slide">
-                  <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FTL%20shorts-2OPcQfkeRE9gu7GSnTM7puuSxNZSEi.png" alt="FTL Shorts Back View" class="product-image">
-                </div>
-              </div>
-              <div class="slider-nav">
-                <button class="slider-prev">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
-                </button>
-                <div class="slider-dots"></div>
-                <button class="slider-next">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="product-info">
-            <h3 class="product-name">FTL Shorts</h3>
-            <div class="product-price">
-              <span class="original-price">$64.99</span>
-              <span class="sale-price">$44.99</span>
-            </div>
-            <div class="product-options">
-              <div class="option-group">
-                <label>Size:</label>
-                <select class="product-size">
-                  <option>S</option>
-                  <option selected>M</option>
-                  <option>L</option>
-                  <option>XL</option>
-                </select>
-              </div>
-              <div class="option-group">
-                <label>Color:</label>
-                <select class="product-color">
-                  <option selected>Black</option>
-                  <option>White</option>
-                  <option>Red</option>
-                </select>
-              </div>
-            </div>
-            <button class="product-button">Add to Cart</button>
-          </div>
-        </div>
-        
-        <!-- Product 3 - FTL OG Hoodie -->
-        <div class="product-card">
-          <div class="sale-badge">SALE</div>
-          <div class="product-slider">
-            <div class="slider-container">
-              <div class="slider-track">
-                <div class="slider-slide">
-                  <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FTL%20hoodie%20front-qZlX6uB6JaNsJpbWzY3W2XSJOh5YcU.png" alt="FTL Hoodie Front View" class="product-image">
-                </div>
-                <div class="slider-slide">
-                  <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FTL%20hoodie%20back-ExbIrBts2vKvD4WCm25PJcDN1Z8X7G.png" alt="FTL Hoodie Back View" class="product-image">
-                </div>
-              </div>
-              <div class="slider-nav">
-                <button class="slider-prev">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
-                </button>
-                <div class="slider-dots"></div>
-                <button class="slider-next">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="product-info">
-            <h3 class="product-name">FTL OG Hoodie</h3>
-            <div class="product-price">
-              <span class="original-price">$95.00</span>
-              <span class="sale-price">$70.00</span>
-            </div>
-            <div class="product-options">
-              <div class="option-group">
-                <label>Size:</label>
-                <select class="product-size">
-                  <option>S</option>
-                  <option selected>M</option>
-                  <option>L</option>
-                  <option>XL</option>
-                </select>
-              </div>
-              <div class="option-group">
-                <label>Color:</label>
-                <select class="product-color">
-                  <option selected>Black</option>
-                  <option>White</option>
-                  <option>Red</option>
-                </select>
-              </div>
-            </div>
-            <button class="product-button">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-    </section>
+        const releaseDate = getTargetDate();
+        console.log("Target date:", releaseDate.toString()); // Debug output
 
-    <section id="contact" class="contact">
-      <div class="contact-overlay"></div>
-      <div class="contact-content">
-        <h2 class="section-title">Contact Us</h2>
-        <div class="contact-grid">
-          <div class="contact-form-container">
-            <form id="my-form" class="contact-form" action="https://formspree.io/f/xzzepjzo" method="POST">
-              <input type="text" name="name" placeholder="Your Name" required>
-              <input type="email" name="email" placeholder="Your Email" required>
-              <textarea name="message" placeholder="Your Message" required></textarea>
-              <button type="submit" class="submit-button">Send Message</button>
-              <p id="my-form-status" class="form-status-message"></p>
-            </form>
-          </div>
-          <div class="contact-info">
-            <div class="contact-info-item">
-              <div class="contact-info-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-              </div>
-              <div class="contact-info-content">
-                <h3>Phone</h3>
-                <p>+1 (555) 123-4567</p>
-              </div>
-            </div>
-            <div class="contact-info-item">
-              <div class="contact-info-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-              </div>
-              <div class="contact-info-content">
-                <h3>Email</h3>
-                <p><a href="/cdn-cgi/l/email-protection#640d0a020b2402010516100c01080b16004a070b09"><span class="__cf_email__" data-cfemail="f79e999198b791929685839f929b988593d994989a">[email&#160;protected]</span></a></p>
-              </div>
-            </div>
-            <div class="contact-info-item">
-              <div class="contact-info-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              </div>
-              <div class="contact-info-content">
-                <h3>Address</h3>
-                <p>123 Faith Street<br>Salvation City, SC 12345<br>United States</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Add this script before closing </body> tag -->
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-      var form = document.getElementById("my-form");
-      
-      async function handleSubmit(event) {
-        event.preventDefault();
-        var status = document.getElementById("my-form-status");
-        var data = new FormData(event.target);
-        
-        fetch(event.target.action, {
-          method: form.method,
-          body: data,
-          headers: {
-            'Accept': 'application/json'
-          }
-        }).then(response => {
-          if (response.ok) {
-            status.innerHTML = "Thanks for your submission!";
-            status.style.color = "#4CAF50"; // Green success color
-            form.reset();
+        // Update the countdown every second
+        function updateCountdown() {
+            const now = new Date();
+            console.log("Current time:", now.toString()); // Debug output
+            
+            const distance = releaseDate.getTime() - now.getTime();
+            console.log("Time difference in ms:", distance); // Debug output
+            
+            // Calculate days, hours, minutes, and seconds
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            console.log(`Countdown: ${days}d ${hours}h ${minutes}m ${seconds}s`); // Debug output
+            
+            // Display the result
+            document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
+            
+            // If the countdown is over
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("countdown").innerHTML = "<h2>The Time Has Come</h2>";
+            }
+        }
+
+        // Initial update
+        updateCountdown();
+
+        // Update every second
+        const countdownInterval = setInterval(updateCountdown, 1000);
+
+        // Lightning effect
+        function triggerLightning() {
+            const lightning = document.querySelector('.lightning');
+            const flash = document.querySelector('.lightning-flash');
+            
+            // Animate lightning
+            lightning.style.animation = 'lightningStrike 2s ease-in-out';
+            flash.style.animation = 'lightningFlash 2s ease-in-out';
+            
+            // Reset animation after it completes
             setTimeout(() => {
-              status.innerHTML = "";
-            }, 3000);
-          } else {
-            response.json().then(data => {
-              if (Object.hasOwn(data, 'errors')) {
-                status.innerHTML = data["errors"].map(error => error["message"]).join(", ");
-              } else {
-                status.innerHTML = "Oops! There was a problem submitting your form";
-              }
-              status.style.color = "#f44336"; // Red error color
-            });
-          }
-        }).catch(error => {
-          status.innerHTML = "Oops! There was a problem submitting your form";
-          status.style.color = "#f44336";
+                lightning.style.animation = '';
+                flash.style.animation = '';
+            }, 2000);
+            
+            // Schedule next lightning
+            const nextLightning = Math.random() * 10000 + 5000; // Between 5-15 seconds
+            setTimeout(triggerLightning, nextLightning);
+        }
+        
+        // Start lightning effect after a delay
+        setTimeout(triggerLightning, 3000);
+
+        // Particle effect
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 50;
+        
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Random size between 2-6px
+            const size = Math.random() * 4 + 2;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Random starting position
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * window.innerHeight;
+            particle.style.left = `${startX}px`;
+            particle.style.top = `${startY}px`;
+            
+            // Add to container
+            particlesContainer.appendChild(particle);
+            
+            // Animate the particle
+            setTimeout(() => {
+                particle.style.opacity = '0.7';
+                
+                // Random movement
+                const endX = startX + (Math.random() * 200 - 100);
+                const endY = startY - Math.random() * 200 - 50; // Always move upward
+                
+                particle.style.transition = `transform ${Math.random() * 5 + 5}s linear, opacity ${Math.random() * 3 + 2}s ease-out`;
+                particle.style.transform = `translate(${endX - startX}px, ${endY - startY}px)`;
+                
+                // Fade out and remove
+                setTimeout(() => {
+                    particle.style.opacity = '0';
+                    setTimeout(() => {
+                        if (particle.parentNode) {
+                            particle.parentNode.removeChild(particle);
+                        }
+                        createParticle(); // Create a new particle to replace this one
+                    }, 2000);
+                }, (Math.random() * 3 + 2) * 1000);
+            }, 10);
+        }
+        
+        // Create initial particles
+        for (let i = 0; i < particleCount; i++) {
+            setTimeout(createParticle, i * 100);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            // Clear all particles
+            particlesContainer.innerHTML = '';
+            
+            // Recreate particles
+            for (let i = 0; i < particleCount; i++) {
+                setTimeout(createParticle, i * 100);
+            }
         });
-      }
-      form.addEventListener("submit", handleSubmit);
     </script>
-    
-    <footer>
-      <div class="footer-content">
-        <p>&copy; 2025 Fear the Lord. All rights reserved.</p>
-        <div class="social-links">
-          <a href="https://www.instagram.com/fearthelord.co" aria-label="Instagram" target="_blank">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-          </a>
-          <a href="https://www.tiktok.com/@fearthelord.co" aria-label="TikTok" target="_blank">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"></path><path d="M15 8a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path><path d="M15 8v8a4 4 0 0 1-4 4"></path><line x1="15" y1="4" x2="15" y2="12"></line></svg>
-          </a>
-        </div>
-      </div>
-    </footer>
-    
-  <script src="script.js"></script>
-  <script src="https://js.stripe.com/v3/"></script>
 </body>
 </html>
 
